@@ -1,29 +1,31 @@
 import tarfile
 import pandas as pd
+from sklearn.svm import LinearSVC
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn import metrics
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix
+from sklearn.utils import resample
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import SelectFromModel
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.model_selection import StratifiedKFold
 from tqdm import trange
+
 
 def histogram(wrong_list):
     histo = np.zeros(198)
     for arr in wrong_list:
         for element in arr:
-            histo[element]+=1
+            histo[element] += 1
     return histo
 
+
 def get_scores(array, start):
-    sc=[]
+    sc = []
     for arr in array:
         sc.append(arr[start])
-    sc = sum(sc)/len(sc)
+    sc = sum(sc) / len(sc)
     return sc
 
 
@@ -40,27 +42,72 @@ def plot_err(errors, df):
     print(errors)
     pics = [np.array(pic).reshape(64, 64).T for pic in pics]
     for pic in pics:
-        #plt.title(f'label = {label[label.index==errors]}')
+        # plt.title(f'label = {label[label.index==errors]}')
         plt.imshow(pic)
         plt.show()
 
 
+def count(feat_list, count_list: np.ndarray, ind: int) -> np.ndarray:
+    for num in feat_list:
+        count_list[ind, num] += 1
+    return count_list
+
+
 if __name__ == '__main__':
-    data = pd.read_csv("CATSnDOGS.csv")/255
-    label = pd.read_csv("Labels.csv")
+    data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+    label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
 
-    wrong_list = []
-    mean_score = []
-    std = []
-    tpr = []
-    tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
+    num_runs = 100
 
+    count_feat = np.zeros([3, np.shape(data)[1]])
+    for i in trange(num_runs):
+        X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
+
+        mean_var = np.mean(X_boot.var(axis=1))
+        std_var = np.std(X_boot.var(axis=1))
+        sel = VarianceThreshold(threshold=(mean_var + std_var))
+        sel.fit(X_boot)
+        var_features = sel.get_support(indices=True)
+        X_var = sel.fit_transform(X_boot)
+
+        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
+
+        selK = SelectKBest(chi2, k=500)
+        selK.fit(X_boot, y_boot)
+        selK_features = selK.get_support(indices=True)
+        X_selK = selK.fit_transform(X_boot, y_boot)
+
+        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
+
+        lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
+        lsvc.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(lsvc, prefit=True)
+        lsvc_features = model.get_support(indices=True)
+        X_lsvc = model.transform(X_boot)
+
+        count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
+
+        print(len(var_features), np.shape(X_var))
+        print(len(selK_features), np.shape(X_selK))
+        print(len(lsvc_features), np.shape(X_lsvc))
+    plt.figure()
+    plt.title('Variance filtering')
+    plt.bar(range(np.shape(data)[1]), count_feat[0,:])
+    plt.figure()
+    plt.title('Select K best, chi2 score')
+    plt.bar(range(np.shape(data)[1]), count_feat[1, :])
+    plt.figure()
+    plt.title('Linear svc')
+    plt.bar(range(np.shape(data)[1]), count_feat[2, :])
+    print(count_feat)
+
+    plt.show()
+    '''
     num_runs = 100
     k = 5
-
+    
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
@@ -127,7 +174,7 @@ if __name__ == '__main__':
     plt.bar(range(len(histo1)), histo3)
 
     plt.show()
-
+    '''
     '''
     ones = np.size(label.index[label.index == 1])
     zeroes = np.size(label.index[label.index == 0])
@@ -146,5 +193,3 @@ if __name__ == '__main__':
     plt.title(f'label = {np.array(label.iloc[0])}')
     plt.imshow(pic1.reshape(64, 64).T)
     '''
-
-
