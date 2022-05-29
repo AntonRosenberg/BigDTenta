@@ -51,6 +51,17 @@ def plot_err(errors, df):
         plt.imshow(pic)
         plt.show()
 
+def plot_feat(feat_list, method):
+    plt.figure()
+    pic1 = np.array(data.iloc[10])
+    plt.title(f'label = {get_label(np.array(label.iloc[10]))}, '+method)
+    plt.imshow(pic1.reshape(64, 64).T)
+    image = np.zeros(np.shape(data)[1])
+    for feat in feat_list:
+        image[int(feat)]+=1
+    print(image)
+    plt.imshow(image.reshape(64,64).T, alpha=0.5)
+
 
 def count(feat_list, count_list: np.ndarray, ind: int) -> np.ndarray:
     for num in feat_list:
@@ -69,7 +80,10 @@ if __name__ == '__main__':
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
 
-    num_runs = 1
+    num_runs = 100
+    threshold = 0.8
+
+    method=['Variance', 'SelectKbest', 'Linear svc']
 
     count_feat = np.zeros([3, np.shape(data)[1]])
     for i in trange(num_runs):
@@ -105,19 +119,19 @@ if __name__ == '__main__':
 
     plt.figure()
     plt.title('Variance filtering')
-    plt.bar(range(np.shape(data)[1]), count_feat[0,:])
+    plt.bar(range(np.shape(data)[1]), count_feat[0, :])
     plt.figure()
     plt.title('Select K best, chi2 score')
     plt.bar(range(np.shape(data)[1]), count_feat[1, :])
     plt.figure()
     plt.title('Linear svc')
     plt.bar(range(np.shape(data)[1]), count_feat[2, :])
-    print(count_feat)
 
-    plt.figure()
-    pic1 = np.array(data.iloc[10])
-    plt.title(f'label = {get_label(np.array(label.iloc[10]))}')
-    plt.imshow(pic1.reshape(64, 64).T)
+    count_feat[count_feat < num_runs*threshold] = 0
+
+    for i in range(len(count_feat[:,0])):
+        feat_list = np.nonzero(count_feat[i, :])
+        plot_feat(feat_list[0], method[i])
 
     plt.show()
 
