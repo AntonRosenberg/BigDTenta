@@ -4,7 +4,7 @@ from sklearn.svm import LinearSVC
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.utils import resample
-from sklearn.metrics import confusion_matrix, homogeneity_score, completeness_score, accuracy_score
+from sklearn.metrics import confusion_matrix, homogeneity_score, completeness_score, accuracy_score, silhouette_score, davies_bouldin_score, calinski_harabasz_score
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 import numpy as np
@@ -69,6 +69,7 @@ def count(feat_list, count_list: np.ndarray, ind: int) -> np.ndarray:
         count_list[ind, num] += 1
     return count_list
 
+
 def fix_pred(pred, true_val, num_clusters):
     pred_new=np.zeros(len(pred))
     for i in range(num_clusters):
@@ -78,6 +79,17 @@ def fix_pred(pred, true_val, num_clusters):
         else:
             pred_new[np.where(pred == i)[0]] = 0
     return pred_new
+
+
+def separate_data(data, labels):
+    indexes_dogs = np.where(labels.values.ravel() == 1)[0]
+    indexes_cats = np.where(labels.values.ravel() == 0)[0]
+    dogs = data.iloc[indexes_dogs]
+    label_dogs = pd.DataFrame(np.ones(np.shape(dogs)[0]))
+    cats = data.iloc[indexes_cats]
+    label_cats = pd.DataFrame(np.zeros(np.shape(cats)[0]))
+
+    return dogs, label_dogs, cats, label_cats
 
 
 if __name__ == '__main__':
@@ -91,8 +103,10 @@ if __name__ == '__main__':
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
 
+    dogs, label_dogs, cats, label_cats = separate_data(data, label)
+
     pca = PCA()
-    pca.fit(data)
+    pca.fit(cats)
     cut_off = 0.03
     PC_values = np.arange(pca.n_components_) + 1
     plt.plot(PC_values, pca.explained_variance_ratio_, 'o-', linewidth=2)
@@ -105,7 +119,7 @@ if __name__ == '__main__':
     num_pca = len(pca.explained_variance_ratio_[pca.explained_variance_ratio_ > cut_off])
     print(num_pca)
     pca = PCA(n_components=num_pca)
-    data = pd.DataFrame(pca.fit_transform(data))
+    cats = pd.DataFrame(pca.fit_transform(cats))
 
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
@@ -116,23 +130,45 @@ if __name__ == '__main__':
 
     y_pred = kmeans.predict(data)
     '''
-    num_clusters = 2
-    gmm = GaussianMixture(n_components=num_clusters)
-    y_pred = gmm.fit_predict(data)
+    num_cluster_list=range(2, 16)
+    silhouette = []
+    calinski = []
+    davies = []
+    for num_clusters in num_cluster_list:
+        gmm = GaussianMixture(n_components=num_clusters)
+        y_pred = gmm.fit_predict(cats)
 
-    y_pred = fix_pred(y_pred, label, num_clusters)
+        #y_pred = fix_pred(y_pred, label_dogs, num_clusters)
 
-    print(accuracy_score(label, y_pred))
-    print(homogeneity_score(np.array(label).flatten(), y_pred))
+        print(f'accuracy = {accuracy_score(label_cats, y_pred)}, silhuette score = {silhouette_score(cats, y_pred)}')
+        #print(homogeneity_score(np.array(label_dogs).flatten(), y_pred))
+        silhouette.append(silhouette_score(cats, y_pred))
+        calinski.append(calinski_harabasz_score(cats, y_pred))
+        davies.append(davies_bouldin_score(cats, y_pred))
+        '''
+        dogs['labels'] = label_dogs
 
-    data['labels'] = np_labels
+        sns.pairplot(dogs, hue='labels',x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
 
-    sns.pairplot(data, hue='labels',x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+        dogs['labels'] = y_pred
 
-    data['labels'] = y_pred
-
-    sns.pairplot(data, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
-
+        sns.pairplot(dogs, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+        '''
+    plt.figure()
+    plt.title('Siluette')
+    plt.ylabel('score')
+    plt.xlabel('#clusters')
+    plt.plot(num_cluster_list, silhouette)
+    plt.figure()
+    plt.title('Davies-Bouldin')
+    plt.ylabel('score')
+    plt.xlabel('#clusters')
+    plt.plot(num_cluster_list, davies)
+    plt.figure()
+    plt.title('Calinski-Harabasz')
+    plt.ylabel('score')
+    plt.xlabel('#clusters')
+    plt.plot(num_cluster_list, calinski)
     plt.show()
     '''
     print(y_pred)
