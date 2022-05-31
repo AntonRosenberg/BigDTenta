@@ -19,6 +19,11 @@ def histogram(wrong_list):
             histo[element]+=1
     return histo
 
+def get_label(label):
+    if label==1:
+        return 'Dog'
+    return 'Cat'
+
 def get_scores(array, start):
     sc=[]
     for arr in array:
@@ -69,7 +74,7 @@ if __name__ == '__main__':
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000)]
+        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):
@@ -137,7 +142,7 @@ if __name__ == '__main__':
     plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo3)
 
-    plt.show()
+
 
     '''
     ones = np.size(label.index[label.index == 1])
@@ -152,10 +157,12 @@ if __name__ == '__main__':
 
     plot_err(wrong_list[0], data)
     '''
-    '''
-    pic1 = np.array(data.iloc[0])
-    plt.title(f'label = {np.array(label.iloc[0])}')
+    plt.figure()
+    pic1 = np.array(data.iloc[8])
+    plt.title(f'label = {get_label(np.array(label.iloc[8]))}')
     plt.imshow(pic1.reshape(64, 64).T)
-    '''
+
+    plt.show()
+
 
 
