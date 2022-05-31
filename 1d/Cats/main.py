@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
 
     num_pca = len(pca.explained_variance_ratio_[pca.explained_variance_ratio_ > cut_off])
-    print(num_pca)
+    print(f'num_pca choosen = {num_pca}')
     pca = PCA(n_components=num_pca)
     cats = pd.DataFrame(pca.fit_transform(cats))
 
@@ -130,45 +130,51 @@ if __name__ == '__main__':
 
     y_pred = kmeans.predict(data)
     '''
-    num_cluster_list=range(2, 16)
-    silhouette = []
-    calinski = []
-    davies = []
-    for num_clusters in num_cluster_list:
-        gmm = GaussianMixture(n_components=num_clusters)
-        y_pred = gmm.fit_predict(cats)
+    num_runs=100
+    num_cluster_list=range(2, 21)
+    silhouette = np.zeros([num_runs, len(num_cluster_list)])
+    calinski = np.zeros([num_runs, len(num_cluster_list)])
+    davies = np.zeros([num_runs, len(num_cluster_list)])
+    for i in trange(num_runs):
+        for j, num_clusters in enumerate(num_cluster_list):
+            gmm = GaussianMixture(n_components=num_clusters)
+            y_pred = gmm.fit_predict(cats)
 
-        #y_pred = fix_pred(y_pred, label_dogs, num_clusters)
+            #y_pred = fix_pred(y_pred, label_dogs, num_clusters)
 
-        print(f'accuracy = {accuracy_score(label_cats, y_pred)}, silhuette score = {silhouette_score(cats, y_pred)}')
-        #print(homogeneity_score(np.array(label_dogs).flatten(), y_pred))
-        silhouette.append(silhouette_score(cats, y_pred))
-        calinski.append(calinski_harabasz_score(cats, y_pred))
-        davies.append(davies_bouldin_score(cats, y_pred))
-        '''
-        dogs['labels'] = label_dogs
+            #print(f'accuracy = {accuracy_score(label_cats, y_pred)}, silhuette score = {silhouette_score(cats, y_pred)}')
+            #print(homogeneity_score(np.array(label_dogs).flatten(), y_pred))
+            silhouette[i,j] = silhouette_score(cats, y_pred)
+            calinski[i,j] = calinski_harabasz_score(cats, y_pred)
+            davies[i,j] = davies_bouldin_score(cats, y_pred)
+            '''
+            cats['labels'] = label_cats
+    
+            sns.pairplot(cats, hue='labels',x_vars=[0, 1, 2, 3, 4, 5], y_vars=[0, 1, 2, 3, 4, 5])
+    
+            cats['labels'] = y_pred
+    
+            sns.pairplot(cats, hue='labels', x_vars=[0, 1, 2, 3, 4, 5], y_vars=[0, 1, 2, 3, 4, 5])
+            '''
+    silhouette_sc = np.average(silhouette, axis=0)
+    davies_sc = np.average(davies, axis=0)
+    calinski_sc = np.average(calinski, axis=0)
 
-        sns.pairplot(dogs, hue='labels',x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
-
-        dogs['labels'] = y_pred
-
-        sns.pairplot(dogs, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
-        '''
     plt.figure()
     plt.title('Siluette')
     plt.ylabel('score')
     plt.xlabel('#clusters')
-    plt.plot(num_cluster_list, silhouette)
+    plt.plot(num_cluster_list, silhouette_sc)
     plt.figure()
     plt.title('Davies-Bouldin')
     plt.ylabel('score')
     plt.xlabel('#clusters')
-    plt.plot(num_cluster_list, davies)
+    plt.plot(num_cluster_list, davies_sc)
     plt.figure()
     plt.title('Calinski-Harabasz')
     plt.ylabel('score')
     plt.xlabel('#clusters')
-    plt.plot(num_cluster_list, calinski)
+    plt.plot(num_cluster_list, calinski_sc)
     plt.show()
     '''
     print(y_pred)

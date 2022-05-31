@@ -48,6 +48,7 @@ def plot_err(errors, df):
 if __name__ == '__main__':
     data = pd.read_csv("CATSnDOGS.csv")/255
     label = pd.read_csv("Labels.csv")
+    
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
 
