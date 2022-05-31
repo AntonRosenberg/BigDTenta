@@ -46,8 +46,12 @@ def plot_err(errors, df):
 
 
 if __name__ == '__main__':
-    data = pd.read_csv("CATSnDOGS.csv")/255
-    label = pd.read_csv("Labels.csv")
+    try:
+        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
+    except:
+        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/Labels.csv")
     
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
@@ -119,12 +123,18 @@ if __name__ == '__main__':
 
     plt.figure()
     plt.title('SVM')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo1)
     plt.figure()
     plt.title('RandomForest')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo2)
     plt.figure()
     plt.title('LogisticRegression')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo3)
 
     plt.show()
