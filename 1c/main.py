@@ -7,6 +7,15 @@ from sklearn.utils import resample
 from sklearn.metrics import confusion_matrix, homogeneity_score, completeness_score, accuracy_score, silhouette_score
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
+from sklearn.svm import LinearSVC
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.utils import resample
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_classif
+from sklearn.feature_selection import SelectFromModel
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
@@ -84,7 +93,83 @@ def get_label_cluster(y_pred, cluster):
     label_cluster = []
     indexes = np.where(y_pred==cluster)[0]
     label_cluster.append(label.iloc[indexes])
+
     return label_cluster
+
+def get_pics(y_pred, data, cluster):
+    indexes = np.where(y_pred == cluster)[0]
+    pics = data.iloc[indexes]
+
+    return np.array(pics), indexes
+
+def plot_pic(pics, i):
+    for pic in pics:
+
+        pic1 = np.array(pic)
+        plt.title(f'Cluster number = '+str(i))
+        plt.imshow(pic1.reshape(64, 64).T)
+        plt.show()
+
+def run_1b(indexes):
+    try:
+        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
+    except:
+        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/Labels.csv")
+
+    np_data = np.array(data)
+    np_labels = np.array(label).flatten()
+
+    num_runs = 100
+    threshold = 0.8
+
+    method=['Variance', 'SelectKbest', 'Linear svc']
+    data = data.iloc[np.array(indexes).flatten()]
+    label = label.iloc[np.array(indexes).flatten()]
+    count_feat = np.zeros([3, np.shape(data)[1]])
+    for i in trange(num_runs):
+        X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
+
+        mean_var = np.mean(X_boot.var(axis=1))
+        std_var = np.std(X_boot.var(axis=1))
+        sel = VarianceThreshold(threshold=(mean_var + std_var))
+        sel.fit(X_boot)
+        var_features = sel.get_support(indices=True)
+        X_var = sel.fit_transform(X_boot)
+
+        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
+
+        selK = SelectKBest(chi2, k=500)
+        selK.fit(X_boot, y_boot)
+        selK_features = selK.get_support(indices=True)
+        X_selK = selK.fit_transform(X_boot, y_boot)
+
+        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
+
+
+        print(len(var_features), np.shape(X_var))
+        print(len(selK_features), np.shape(X_selK))
+
+
+    plt.figure()
+    plt.title('Variance filtering')
+    plt.bar(range(np.shape(data)[1]), count_feat[0, :])
+    plt.figure()
+    plt.title('Select K best, chi2 score')
+    plt.bar(range(np.shape(data)[1]), count_feat[1, :])
+    plt.figure()
+    plt.title('Linear svc')
+    plt.bar(range(np.shape(data)[1]), count_feat[2, :])
+
+    count_feat[count_feat < num_runs*threshold] = 0
+
+    for i in range(len(count_feat[:,0])):
+        feat_list = np.nonzero(count_feat[i, :])
+        plot_feat(feat_list[0], method[i])
+
+    plt.show()
+
 
 if __name__ == '__main__':
     try:
@@ -111,7 +196,7 @@ if __name__ == '__main__':
     num_pca = len(pca.explained_variance_ratio_[pca.explained_variance_ratio_ > cut_off])
     print(num_pca)
     pca = PCA(n_components=num_pca)
-    data = pd.DataFrame(pca.fit_transform(data))
+    data_pca = pd.DataFrame(pca.fit_transform(data))
 
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
@@ -122,97 +207,121 @@ if __name__ == '__main__':
 
     y_pred = kmeans.predict(data)
     '''
-    num_clusters = 8
-    gmm = GaussianMixture(n_components=num_clusters)
-    y_pred = gmm.fit_predict(data)
+    num_runs=1
+    cluster_list=[8]
+    for num_clusters in cluster_list:
+        sil_score = []
 
-    cluster_labels = [np.array(get_label_cluster(y_pred, cluster=i)).flatten() for i in range(num_clusters)]
-    overlap = [np.sum(cluster)/len(cluster) for cluster in cluster_labels]
-    print(overlap)
-    #y_pred = fix_pred(y_pred, label, num_clusters)
+        for i in trange(num_runs):
+            gmm = GaussianMixture(n_components=num_clusters)
+            y_pred = gmm.fit_predict(data_pca)
 
-    print(accuracy_score(label, y_pred))
-    print(silhouette_score(label, y_pred))
+            cluster_labels = [np.array(get_label_cluster(y_pred, cluster=i)).flatten() for i in range(num_clusters)]
+            overlap = [np.sum(cluster)/len(cluster) for cluster in cluster_labels]
 
-    plt.figure()
-    plt.xlabel('Cluster #')
-    plt.ylabel('Precentage dogs in cluster')
-    plt.bar(range(num_clusters), overlap)
-    plt.xticks(range(num_clusters), range(num_clusters))
-    plt.show()
+            pics = [get_pics(y_pred, data, i)[0] for i in range(num_clusters)]
+            indexes = [get_pics(y_pred, data, i)[1] for i in range(num_clusters)]
+            index_max = np.argmax(overlap)
+            index_min = np.argmin(overlap)
 
-    data['labels'] = np_labels
+            run_1b(pd.DataFrame(indexes[index_min]))
 
-    sns.pairplot(data, hue='labels',x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+            plot_pic(pics[index_min], i=index_min)
+            plt.show()
+            '''
+            for i, pic in enumerate(pics):
+                print(f' pic = {pic}')
+                plot_pic(pic, i)
+                plt.show()
+            '''
+            sil_score.append(silhouette_score(data_pca, y_pred))
 
-    data['labels'] = y_pred
+            plt.figure()
+            plt.xlabel('Cluster #')
+            plt.ylabel('Precentage dogs in cluster')
+            plt.bar(range(num_clusters), overlap)
+            plt.xticks(range(num_clusters), range(num_clusters))
 
-    sns.pairplot(data, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+            data_pca['labels'] = np_labels
+        
+            sns.pairplot(data_pca, hue='labels',x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+        
+            data_pca['labels'] = y_pred
+        
+            sns.pairplot(data_pca, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
+            plt.show()
+            plt.close('all')
+        sil_score_avg = round(np.mean(sil_score), 3)
+        sil_score_std = round(np.std(sil_score), 3)
 
-    #plt.show()
-    '''
-    print(y_pred)
-    print(homogeneity_score(np.array(label).flatten(), y_pred))
-    print(completeness_score(np.array(label).flatten(), y_pred))
+        file = open(f'cluster num = {num_clusters}', 'w')
+        file.write(
+            f'SilScore = {sil_score_avg}, silstd = {sil_score_std}')
+        file.close()
+        #plt.show()
+        '''
+        print(y_pred)
+        print(homogeneity_score(np.array(label).flatten(), y_pred))
+        print(completeness_score(np.array(label).flatten(), y_pred))
+    
+        cm = confusion_matrix(label.values.ravel(), y_pred)
+        print(cm)
+        '''
 
-    cm = confusion_matrix(label.values.ravel(), y_pred)
-    print(cm)
-    '''
-
-    '''
-    num_runs = 100
-    threshold = 0.8
-
-    method=['Variance', 'SelectKbest', 'Linear svc']
-
-    count_feat = np.zeros([3, np.shape(data)[1]])
-    for i in trange(num_runs):
-        X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
-
-        mean_var = np.mean(X_boot.var(axis=1))
-        std_var = np.std(X_boot.var(axis=1))
-        sel = VarianceThreshold(threshold=(mean_var + std_var))
-        sel.fit(X_boot)
-        var_features = sel.get_support(indices=True)
-        X_var = sel.fit_transform(X_boot)
-
-        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
-
-        selK = SelectKBest(chi2, k=500)
-        selK.fit(X_boot, y_boot)
-        selK_features = selK.get_support(indices=True)
-        X_selK = selK.fit_transform(X_boot, y_boot)
-
-        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
-
-        lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
-        lsvc.fit(X_boot, y_boot.values.ravel())
-        model = SelectFromModel(lsvc, prefit=True)
-        lsvc_features = model.get_support(indices=True)
-        X_lsvc = model.transform(X_boot)
-
-        count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
-
-        print(len(var_features), np.shape(X_var))
-        print(len(selK_features), np.shape(X_selK))
-        print(len(lsvc_features), np.shape(X_lsvc))
-
-    plt.figure()
-    plt.title('Variance filtering')
-    plt.bar(range(np.shape(data)[1]), count_feat[0, :])
-    plt.figure()
-    plt.title('Select K best, chi2 score')
-    plt.bar(range(np.shape(data)[1]), count_feat[1, :])
-    plt.figure()
-    plt.title('Linear svc')
-    plt.bar(range(np.shape(data)[1]), count_feat[2, :])
-
-    count_feat[count_feat < num_runs*threshold] = 0
-
-    for i in range(len(count_feat[:,0])):
-        feat_list = np.nonzero(count_feat[i, :])
-        plot_feat(feat_list[0], method[i])
-
-    plt.show()
-    '''
+        '''
+        num_runs = 100
+        threshold = 0.8
+    
+        method=['Variance', 'SelectKbest', 'Linear svc']
+    
+        count_feat = np.zeros([3, np.shape(data)[1]])
+        for i in trange(num_runs):
+            X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
+    
+            mean_var = np.mean(X_boot.var(axis=1))
+            std_var = np.std(X_boot.var(axis=1))
+            sel = VarianceThreshold(threshold=(mean_var + std_var))
+            sel.fit(X_boot)
+            var_features = sel.get_support(indices=True)
+            X_var = sel.fit_transform(X_boot)
+    
+            count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
+    
+            selK = SelectKBest(chi2, k=500)
+            selK.fit(X_boot, y_boot)
+            selK_features = selK.get_support(indices=True)
+            X_selK = selK.fit_transform(X_boot, y_boot)
+    
+            count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
+    
+            lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
+            lsvc.fit(X_boot, y_boot.values.ravel())
+            model = SelectFromModel(lsvc, prefit=True)
+            lsvc_features = model.get_support(indices=True)
+            X_lsvc = model.transform(X_boot)
+    
+            count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
+    
+            print(len(var_features), np.shape(X_var))
+            print(len(selK_features), np.shape(X_selK))
+            print(len(lsvc_features), np.shape(X_lsvc))
+    
+        plt.figure()
+        plt.title('Variance filtering')
+        plt.bar(range(np.shape(data)[1]), count_feat[0, :])
+        plt.figure()
+        plt.title('Select K best, chi2 score')
+        plt.bar(range(np.shape(data)[1]), count_feat[1, :])
+        plt.figure()
+        plt.title('Linear svc')
+        plt.bar(range(np.shape(data)[1]), count_feat[2, :])
+    
+        count_feat[count_feat < num_runs*threshold] = 0
+    
+        for i in range(len(count_feat[:,0])):
+            feat_list = np.nonzero(count_feat[i, :])
+            plot_feat(feat_list[0], method[i])
+    
+        plt.show()
+        '''
 

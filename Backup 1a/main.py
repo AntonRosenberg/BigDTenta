@@ -11,9 +11,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.model_selection import StratifiedKFold
 from tqdm import trange
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.model_selection import GridSearchCV
-
 
 def histogram(wrong_list):
     histo = np.zeros(198)
@@ -52,19 +49,6 @@ def plot_err(errors, df):
         plt.imshow(pic)
         plt.show()
 
-def get_hyper(model, X, y, params):
-
-    results = pd.DataFrame(columns=['model', 'params'])
-
-
-
-    clf = GridSearchCV(model, params, cv=5)
-    clf.fit(X, y.values.ravel())
-    row = {'model': model, 'params': clf.best_params_}
-    print(clf.best_params_['C'])
-
-
-    return clf.best_params_['C']
 
 if __name__ == '__main__':
     try:
@@ -86,19 +70,11 @@ if __name__ == '__main__':
 
     num_runs = 100
     k = 5
-    ###################
 
-    ###########################
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
         models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
-        #params_SVC = get_hyper(models[0], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
-        #params_LogReg = get_hyper(models[2], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
-        params_SVC = 9.236708571873866
-        params_LogReg = 0.05736152510448681
-        models = [SVC(C=params_SVC), RandomForestClassifier(), LogisticRegression(C=params_LogReg,max_iter=1000, penalty='l2')]
-
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):

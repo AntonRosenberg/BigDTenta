@@ -243,9 +243,10 @@ if __name__ == '__main__':
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
 
-    num_clusters = 5 # Cats
+    num_clusters = 5
+    # Cats
     #num_clusters = 2 # Dogs
-    num_runs = 1000
+    num_runs = 100
     score=[]
     for i in trange(num_runs):
         gmm = GaussianMixture(n_components=num_clusters)
@@ -257,7 +258,7 @@ if __name__ == '__main__':
 
         score.append(svm.score(test_data, test_labels))
         pred = svm.predict(test_data)
-
+    print(pred)
     print(np.mean(score), np.std(score))
 
     # run_1a(cats_pca, y_pred)

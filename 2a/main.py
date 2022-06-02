@@ -124,7 +124,7 @@ def main(num_pics, noise_level, num_runs):
     histo2 = histogram(wrong_list_m2)
     histo3 = histogram(wrong_list_m3)
 
-    err_pics1 = [ind for ind, value in enumerate(histo1) if value>0.8*num_runs]
+    err_pics1 = [ind for ind, value in enumerate(histo1) if value > 0.8 * num_runs]
     err_pics2 = [ind for ind, value in enumerate(histo2) if value > 0.8 * num_runs]
     err_pics3 = [ind for ind, value in enumerate(histo3) if value > 0.8 * num_runs]
 

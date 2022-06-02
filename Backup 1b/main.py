@@ -5,13 +5,10 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.utils import resample
 from sklearn.feature_selection import VarianceThreshold
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.feature_selection import f_classif
 from sklearn.feature_selection import SelectFromModel
-from sklearn.linear_model import LogisticRegression
 import numpy as np
 from matplotlib import pyplot as plt
 from tqdm import trange
@@ -85,29 +82,29 @@ if __name__ == '__main__':
     np_labels = np.array(label).flatten()
 
     num_runs = 100
-    threshold = 0.5
+    threshold = 0.8
 
-    method=['Logistic Regression', 'Random Forest', 'Linear svc']
+    method=['Variance', 'SelectKbest', 'Linear svc']
 
     count_feat = np.zeros([3, np.shape(data)[1]])
     for i in trange(num_runs):
         X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
 
-        LogReg = LogisticRegression(max_iter=1000)
-        LogReg.fit(X_boot, y_boot.values.ravel())
-        model = SelectFromModel(LogReg, prefit=True)
-        LogReg_features = model.get_support(indices=True)
-        X_LogReg = model.transform(X_boot)
+        mean_var = np.mean(X_boot.var(axis=1))
+        std_var = np.std(X_boot.var(axis=1))
+        sel = VarianceThreshold(threshold=(mean_var + std_var))
+        sel.fit(X_boot)
+        var_features = sel.get_support(indices=True)
+        X_var = sel.fit_transform(X_boot)
 
-        count_feat = count(feat_list=LogReg_features, count_list=count_feat, ind=0)
+        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
 
-        RandForest = RandomForestClassifier()
-        RandForest.fit(X_boot, y_boot.values.ravel())
-        model = SelectFromModel(RandForest, prefit=True)
-        RandForest_features = model.get_support(indices=True)
-        X_RandForest = model.transform(X_boot)
+        selK = SelectKBest(chi2, k=500)
+        selK.fit(X_boot, y_boot)
+        selK_features = selK.get_support(indices=True)
+        X_selK = selK.fit_transform(X_boot, y_boot)
 
-        count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
+        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
 
         lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
         lsvc.fit(X_boot, y_boot.values.ravel())
@@ -117,15 +114,15 @@ if __name__ == '__main__':
 
         count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
 
-        print(len(LogReg_features), np.shape(X_LogReg))
-        print(len(RandForest_features), np.shape(X_RandForest))
+        print(len(var_features), np.shape(X_var))
+        print(len(selK_features), np.shape(X_selK))
         print(len(lsvc_features), np.shape(X_lsvc))
 
     plt.figure()
-    plt.title('Logistic Regression')
+    plt.title('Variance filtering')
     plt.bar(range(np.shape(data)[1]), count_feat[0, :])
     plt.figure()
-    plt.title('Random Forest')
+    plt.title('Select K best, chi2 score')
     plt.bar(range(np.shape(data)[1]), count_feat[1, :])
     plt.figure()
     plt.title('Linear svc')
