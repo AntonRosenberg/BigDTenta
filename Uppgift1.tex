@@ -20,19 +20,22 @@
 \newpage
 \section{a}
 \subsection{Results}
-The three classifiers i choose to implement were Random forest, SVM and Logistic regression. Using these three methods stratisfied K fold was used with 5 folds to fit the hyper parameters for the SVM and Logistic regression model. Furthermore the entire process was run 100 times (monte carlo simulation) and the final scores were the mean of the scores during these runs see table \ref{score}. The only data prepossessing made was to normalise the data so that all features have values between 0 and 1.
+The three classifiers I chose to implement were Random forest, SVM with Rbf kernel and Logistic regression with liblinear solver. Using these three methods stratisfied K fold was used with 5 folds to fit the hyper parameters for the SVM and Logistic regression model. Furthermore the entire process was run 100 times (monte carlo simulation) and the final scores were the mean of the scores during these runs see table \ref{score}. The data was also split into train and test data at the start of each run were the score was taken on the test data after being fitted and its hyper parameters tuned on training. The score is around 80\% for all the classifiers with a relatively small standard deviation which would indicate that the data are quite separable bot not linearly. This was concludeed since if it were an SVM model with linear kernel should achieve an accuracy of 100\% which it did not since it preformed worse than the rfb kernel used with only an accuracy of about 0.74 with std of 0.06. The only data prepossessing made was to normalise the data so that all features have values between 0 and 1. Finally a record of the images which were classified incorrectly was kept during the 100 runs and can be seen in figure \ref{wrong}, here the x-axis represents the picture number and the y-axis the number of times that picture was incorrectly classified. 
+
+From the scores we can see that the SVM model preforms better than the others this could be due to the fact that SVM works well when we don't know alot about the data and how it's distributed which is the case for the images in the CATSnDOGS data set. However SVM is also usually prone to overfitting when using a complex kernel on a data set where the feature number is vastly larger than the number of samples hence it's surprising that the model preformed so well on the test set. As for the kernel chosen it's difficult to know which one to use through trial and error the default rfb was found to work best. It's surprising that the logistic regression model worked so well since we have a lot less samples than features and we haven't done any feature reduction. This could be due to the fact that the l2 penalisation was used to minimize the negative effect of having less samples than features. When looking at the difference between classifying dogs and cats we look at the TPR which is the rate at which dogs are correctly classified and the TNR the same for the cats. We can see that the models have roughly the same amount of errors for both the dogs and the cats which would indicate that they are equally difficult to predict. When looking at the images which were consistently mislabeled there were a few which pictures which were incorrectly classified all the time by all classifiers. One example of these pictures can be seen in \ref{faulty data}. Here we see that the image clearly is of a cat but the label says it's a dog so we have some incorrectly labeled pictures in our data set which explains why they are incorrectly classified. There are probably some pictures which are outliers as well which would make them difficult to classify correctly for example a dog with very catlike features. 
+\subsection{Conclusion}
+As a conclusion we can say that it's difficult to separate dogs from cats completely but it can be done quite successfully since an accuracy of around 80\% was achivable. Furthermore the misslabeled data further increases the difficulty for a classifier to achieve good scores and they are consistently miss labeled by all three classifiers tested. The dogs and cats seem to be equaly hard to classify from the TPR and TNR for all the models.  
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c}
         Model & accuracy & std & TPR & TNR \\
-         SVM & 0.846 & 0.056 & 0.825 & 0.87 \\
+         SVM & 0.79 & 0.056 & 0.825 & 0.87 \\
          Random forest & 0.75 & 0.065 & 0.781 & 0.714 \\
          Logistic regression & 0.77 & 0.057 & 0.761 & 0.783
     \end{tabular}
     \caption{Scores for the different models}
     \label{score}
 \end{table}
-Finally a record of the images which were classified incorrectly was kept during the 100 runs and can be seen in figure \ref{wrong}, here the x-axis represents the picture number and the y-axis the number of times that picture was incorrectly classified.
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -58,8 +61,6 @@ Finally a record of the images which were classified incorrectly was kept during
 \caption{Put your caption here}
 \label{wrong}
 \end{figure}
-\subsection{Discussion}
-From the scores we can see that the SVM model preforms better than the others this could be due to the fact that SVM works well when we don't know alot about the data and how it's distributed which is the case for the images in the CATSnDOGS data set. Moreover SVM is less prone to overfiting due to it being a maximum margin classifier which could be an explanation for why it has a higher accuracy than the other models. Its suprising that the logistic regression model worked so well since we have alot less samples than features and we haven't done any feature reduction. This could be due to the fact that the l2 penalisation was used to minimize the negative effect of having less samples than features. When looking at the difference between classifying dogs and cats we look at the TPR which is the rate at which dogs are correctly classified and the TNR the same for the cats. We can see that the models have roughly the same amount of errors for both the dogs and the cats which would indicate that they are equaly difficult to predict. When looking at the images which were consistenly mislabeled there were a few which pictures which were incorrectly classified all the time by all classifiers. One example of these pictures can be seen in \ref{faulty data}. Here we see that the image clearly is of a cat but the label says it's a dog so we have some incorrectly labeled pictures in our data set which explains why they are incorrectly classified. There are probably some pictures which are outliers aswell which would make them difficult to classify correctly for example a dog with very catlike features. 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{1a/Dirty data.png}
@@ -69,26 +70,28 @@ From the scores we can see that the SVM model preforms better than the others th
 \newpage
 \section{b}
 \subsection{Result}
-The three different classification methods used for finding the most important features were Logistic regression, Random Forest and linearSVC. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. 
+The three different classification methods used for finding the most important features were Logistic regression, Random Forest and linearSVC. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. We can see that Random forrest clearly looks at the pixels around the forhead, eyes and nose of the cats and dogs \ref{RandF}. We can also see from figure \ref{RandForSel} that the model is not very certain on its feature selections since few of them were selected above 40\% of the time. As for the linear SVC method it's difficult to see why these pixels are deemed important since they don't cluster around any given area of the picture like the around the eyes for example. This could be because the linear kernal is poorly suited for this data set this could also be why so few pixels were selected above the threshold of 60\%. The logistic regression deemed a lot of pixels as important and alot of the features were selected 100\% of the time compared to the Linear SVC and Random forest hence logistic regression seems to be more certain in its feature selection.  The stability of the chosen pixels is improved vastly by bootstrapping and choosing a threshold were only features selected more than the threshold are kept. The threshold was set at 60\% for the pixels shown in \ref{imp pixels}.
+\subsection{Conclusions}
+Logistic regression seems to be the most robust when it comes to certainty in feature selection, it also looks at a lot more features than the other two models. Random forest seems to have trouble deciding which features are deemed important and zero of the features were selected 100\% of the time in the bootstrapping. 
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{1b/Figure_2.png}  
+  \includegraphics[width=1\linewidth]{1b/Figure_2_bra.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-first}
+  \label{RandForSel}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1b/Figure_3.png}  
+  \includegraphics[width=1\linewidth]{1b/Figure_3_bra.png}  
   \caption{Put your sub-caption here}
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1b/Figure_1.png}  
+  \includegraphics[width=1\linewidth]{1b/Figure_1_bra.png}  
   \caption{Put your sub-caption here}
   \label{fig:sub-second}
 \end{subfigure}
@@ -100,9 +103,9 @@ The three different classification methods used for finding the most important f
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{1b/Imp_feat_kbest.png}  
+  \includegraphics[width=1\linewidth]{1b/Imp_feat RandForest.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-first}
+  \label{RandF}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -114,26 +117,41 @@ The three different classification methods used for finding the most important f
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1b/Imp_feat_var.png}  
+  \includegraphics[width=1\linewidth]{1b/Imp_feat LogReg.png}  
   \caption{Put your sub-caption here}
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
 \label{imp pixels}
 \end{figure}
-\subsection{Discussion}
-We can see that both select K best and variance filtering seem to look mostly at pixels around the ears area which makes sense since the ears between cats and dogs are generally very different. There is however some difference between the select Kbest and variance filtering even though they have some overlap and seem to both be looking primarily at the ears. As for the linear SVC method it's difficult to see why these pixels are deemed important since they don't cluster around any given area of the picture like the around the eyes for example. This could be because the linear kernal is poorly suited for this data set this could also be why so few pixels were selected above the threshold of 80\%.  The stability of the chosen pixels is improved vastly by bootstrapping and choosing a threshold were only features selected more than the threshold are kept. The threshold was set at 80\% for the pixels shown in \ref{imp pixels}. 
 \newpage
 \section{c}
 \subsection{Result}
-The clustering method used was gaussian mixture model and the data was preprocessed by normalization and using principle components. A cutoff at 0.03 was chosen to decide the number of PCA used which is indicated by the red line in figure \ref{scree}.   
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{1c/Scree plot.png}
-    \caption{Caption}
-    \label{scree}
+The clustering method used was gaussian mixture model and the data was preprocessed by normalization and using principle components. A cutoff at 0.03 was chosen to decide the number of PCA used which is indicated by the red line in figure \ref{scree}. How well the clustering worked was measured by two factors: one how well the clusters agree with the class labels and the Silhouette score. In figure \ref{LabelOverlap} the percentage of dogs in each cluster can be seen for different amount of clusters with the remaining percentage being cats. From the figure one can see that having more than two clusters leads to several clusters having having around 40-60\% of dogs and cats in them which indicates that these clusters don't agree well with the class labels. Moreover the Silhouette score seen in table \ref{sill} seem to suggest that 3 clusters yield the best clustering. However the Silhouette score is low overall which indicates that there is a lot of overlap between the clusters.      
+
+\begin{comment}
+\begin{figure}[ht]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1c/True labels sns.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1c/two clusters gmm sns.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{imp pixels}
 \end{figure}
-How well the clustering worked was measured by two factors: one how well the clusters agree with the class labels and the Silhouette score. In figure \ref{LabelOverlap} the percentage of dogs in each cluster can be seen for different amount of clusters with the remaining percentage being cats. From the figure one can see that having more than two clusters leads to several clusters having having around 40-60\% of dogs and cats in them which indicates that these clusters don't agree well with the class labels. Moreover the Silhouette score seen in table \ref{sill} seem to suggest that 3 clusters yield the best clustering. However the Silhouette score is low overall which indicates that there is a lot of overlap between the clusters.      
+\end{comment}
+Gaussian mixture model is a method which generally works quite well since it only assumes that the data can be split into normally distributed sub-classes however we can see that it struggles to produce well separated clusters containing only dogs and cats. This could be due to the fact that the cats and dogs data is not well separated which can be seen by looking at the pair plot of the PCA reduced data see figure \ref{pca}. PCA was choosen since we have a high correlation between many of the pixels (features) since it's a picture of an animal if one pixel has a color (rgb value) the ones next to it will in most cases have a similar value. As to which characteristics of the data the clustering picks up a similar feature selection as in 1b was made for the clusters containing most dogs and the one with most cats, for the dogs it seemed like the area around the right ear was the charactersistic picked up by the cluster whilst for the cats the entire right most side of the picture was the most important. It also seemed to be mostly dark cats in the cat majority cluster containing the cats whilst there were mostly brighter pictures in the dog majority cluster.
+\subsection{Conclusion}
+The clusters don't seem to agree to well with the class labels since no number of clusters produces purely clusters containing only dogs or cats as seen in the example for 2, 3 and 8 clusters in \ref{LabelOverlap}. Furthermore the clusters don't seem to be well spread since the low Silhuette scores seen in \ref{sill} suggests that members in clusters fit well in neighbouring clusters as well. 
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -170,36 +188,24 @@ How well the clustering worked was measured by two factors: one how well the clu
     \label{sill}
 \end{table}
 
-\begin{comment}
-\begin{figure}[ht]
-\begin{subfigure}{.5\textwidth}
-  \centering
-  % include first image
-  \includegraphics[width=1\linewidth]{1c/True labels sns.png}  
-  \caption{Put your sub-caption here}
-  \label{fig:sub-first}
-\end{subfigure}
-\begin{subfigure}{.5\textwidth}
-  \centering
-  % include second image
-  \includegraphics[width=1\linewidth]{1c/two clusters gmm sns.png}  
-  \caption{Put your sub-caption here}
-  \label{fig:sub-second}
-\end{subfigure}
-\caption{Put your caption here}
-\label{imp pixels}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{1c/Scree plot.png}
+    \caption{Caption}
+    \label{scree}
 \end{figure}
-\end{comment}
-\subsection{Discussion}
-Gaussian mixture model is a method which generally works quite well since it only assumes that the data can be split into normally distributed sub-classes however we can see that it struggles to produce well separated clusters containing only dogs and cats. This could be due to the fact that the cats and dogs data is not well separated which can be seen by looking at the pair plot of the data produced by the PCA prepossessing see figure \ref{pca}. PCA was choosen since we have a highcorrelation between many of the pixels (features) since it's a picture of an animal if one pixel has a color (rgb value) the ones next to it will in most cases have a similar value. As to which characteristics of the data the clustering picks up a similar feature selection as in 1b was made for the clusters containing most dogs and the one with most cats, for the dogs it seemed like the area around the right ear was the charactersistic picked up by the cluster whilst for the cats the entire right most side of the picture was the most important. It also seemed to be mostly dark cats in the cat majority cluster containing the cats whilst there were mostly brighter pictures in the dog majority cluster.       
+
 \begin{figure}[H]
     \centering
     \includegraphics[scale = 0.3]{1c/True labels sns.png}
     \caption{Caption}
     \label{pca}
 \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{d}
 \subsection{Results}
+Firstly the data was split into cats and dogs then the same process as in c was made with gmm. However now three internal indicies were looked at in order to find the appropriate cluster number for both data sets see figure \ref{Int indiciees} and figure \ref{Int indiciees dog}. 
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -223,7 +229,32 @@ Gaussian mixture model is a method which generally works quite well since it onl
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{LabelOverlap}
+\label{Int indiciees}
+\end{figure}
+\begin{figure}[ht]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1d/Dogs/siluette dog.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1d/Dogs/Davies_dog.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1d/Dogs/Calinski dog.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{Int indiciees dog}
 \end{figure}
 
 \end{document}
