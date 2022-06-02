@@ -82,7 +82,7 @@ if __name__ == '__main__':
     std = []
     tpr = []
     tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
+    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
 
     num_runs = 100
     k = 5
@@ -92,12 +92,12 @@ if __name__ == '__main__':
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
+        models = [SVC(), RandomForestClassifier(), LogisticRegression(solver='liblinear', max_iter=1000, penalty='l2')]
         #params_SVC = get_hyper(models[0], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
         #params_LogReg = get_hyper(models[2], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
         params_SVC = 9.236708571873866
         params_LogReg = 0.05736152510448681
-        models = [SVC(C=params_SVC), RandomForestClassifier(), LogisticRegression(C=params_LogReg,max_iter=1000, penalty='l2')]
+        models = [SVC(C=params_SVC), RandomForestClassifier(), LogisticRegression(C=params_LogReg, max_iter=1000, penalty='l2')]
 
         score = np.zeros([len(models), k])
         fold_ind = 0
@@ -106,10 +106,10 @@ if __name__ == '__main__':
             y_train, y_test = y_tr.iloc[train_index], y_tr.iloc[test_index]
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
-                prediction = model.predict(X_test)
-                score[ind, fold_ind]=(model.score(X_test, y_test))
-                tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
-                wrong_list.append(check_predictions(prediction, y_test))
+                prediction = model.predict(x_tr)
+                score[ind, fold_ind]=(model.score(x_te, y_te))
+                tn, fp, fn, tp = confusion_matrix(y_te, prediction).ravel()
+                wrong_list.append(check_predictions(prediction, y_te))
                 tpr.append(tp/(tp+fn))
                 tnr.append(tn/(tn+fp))
             fold_ind += 1

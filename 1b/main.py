@@ -93,7 +93,7 @@ if __name__ == '__main__':
     for i in trange(num_runs):
         X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
 
-        LogReg = LogisticRegression(max_iter=1000)
+        LogReg = LogisticRegression(C=0.05736152510448681,max_iter=1000)
         LogReg.fit(X_boot, y_boot.values.ravel())
         model = SelectFromModel(LogReg, prefit=True)
         LogReg_features = model.get_support(indices=True)
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
         count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
 
-        lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
+        lsvc = LinearSVC(C=9, penalty="l1", dual=False, max_iter=10000)
         lsvc.fit(X_boot, y_boot.values.ravel())
         model = SelectFromModel(lsvc, prefit=True)
         lsvc_features = model.get_support(indices=True)

@@ -11,16 +11,14 @@ from sklearn.svm import LinearSVC
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.utils import resample
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
-from sklearn.feature_selection import f_classif
+from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
 import seaborn as sns
 from tqdm import trange
+from sklearn.ensemble import RandomForestClassifier
 
 
 def get_label(label):
@@ -131,40 +129,47 @@ def run_1b(indexes):
     for i in trange(num_runs):
         X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
 
-        mean_var = np.mean(X_boot.var(axis=1))
-        std_var = np.std(X_boot.var(axis=1))
-        sel = VarianceThreshold(threshold=(mean_var + std_var))
-        sel.fit(X_boot)
-        var_features = sel.get_support(indices=True)
-        X_var = sel.fit_transform(X_boot)
+        LogReg = LogisticRegression(C=0.05736152510448681, max_iter=1000)
+        LogReg.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(LogReg, prefit=True)
+        LogReg_features = model.get_support(indices=True)
+        X_LogReg = model.transform(X_boot)
 
-        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
+        count_feat = count(feat_list=LogReg_features, count_list=count_feat, ind=0)
 
-        selK = SelectKBest(chi2, k=500)
-        selK.fit(X_boot, y_boot)
-        selK_features = selK.get_support(indices=True)
-        X_selK = selK.fit_transform(X_boot, y_boot)
+        RandForest = RandomForestClassifier()
+        RandForest.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(RandForest, prefit=True)
+        RandForest_features = model.get_support(indices=True)
+        X_RandForest = model.transform(X_boot)
 
-        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
+        count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
 
+        lsvc = LinearSVC(C=9, penalty="l1", dual=False, max_iter=10000)
+        lsvc.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(lsvc, prefit=True)
+        lsvc_features = model.get_support(indices=True)
+        X_lsvc = model.transform(X_boot)
 
-        print(len(var_features), np.shape(X_var))
-        print(len(selK_features), np.shape(X_selK))
+        count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
 
+        print(len(LogReg_features), np.shape(X_LogReg))
+        print(len(RandForest_features), np.shape(X_RandForest))
+        print(len(lsvc_features), np.shape(X_lsvc))
 
     plt.figure()
-    plt.title('Variance filtering')
+    plt.title('Logistic Regression')
     plt.bar(range(np.shape(data)[1]), count_feat[0, :])
     plt.figure()
-    plt.title('Select K best, chi2 score')
+    plt.title('Random Forest')
     plt.bar(range(np.shape(data)[1]), count_feat[1, :])
     plt.figure()
     plt.title('Linear svc')
     plt.bar(range(np.shape(data)[1]), count_feat[2, :])
 
-    count_feat[count_feat < num_runs*threshold] = 0
+    count_feat[count_feat < num_runs * threshold] = 0
 
-    for i in range(len(count_feat[:,0])):
+    for i in range(len(count_feat[:, 0])):
         feat_list = np.nonzero(count_feat[i, :])
         plot_feat(feat_list[0], method[i])
 
@@ -184,7 +189,7 @@ if __name__ == '__main__':
 
     pca = PCA()
     pca.fit(data)
-    cut_off = 0.03
+    cut_off = 0.01
     PC_values = np.arange(pca.n_components_) + 1
     plt.plot(PC_values, pca.explained_variance_ratio_, 'o-', linewidth=2)
     plt.axhline(cut_off, color="red")
@@ -208,7 +213,7 @@ if __name__ == '__main__':
     y_pred = kmeans.predict(data)
     '''
     num_runs=1
-    cluster_list=[8]
+    cluster_list=[2,3,4,5,6,7,8]
     for num_clusters in cluster_list:
         sil_score = []
 
@@ -224,10 +229,10 @@ if __name__ == '__main__':
             index_max = np.argmax(overlap)
             index_min = np.argmin(overlap)
 
-            run_1b(pd.DataFrame(indexes[index_min]))
+            #run_1b(pd.DataFrame(indexes[index_min]))
 
-            plot_pic(pics[index_min], i=index_min)
-            plt.show()
+            #plot_pic(pics[index_min], i=index_min)
+            #plt.show()
             '''
             for i, pic in enumerate(pics):
                 print(f' pic = {pic}')
@@ -251,6 +256,7 @@ if __name__ == '__main__':
             sns.pairplot(data_pca, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
             plt.show()
             plt.close('all')
+
         sil_score_avg = round(np.mean(sil_score), 3)
         sil_score_std = round(np.std(sil_score), 3)
 

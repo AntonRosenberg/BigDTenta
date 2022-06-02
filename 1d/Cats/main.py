@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     pca = PCA()
     pca.fit(cats)
-    cut_off = 0.03
+    cut_off = 0.01
     PC_values = np.arange(pca.n_components_) + 1
     plt.plot(PC_values, pca.explained_variance_ratio_, 'o-', linewidth=2)
     plt.axhline(cut_off, color="red")
