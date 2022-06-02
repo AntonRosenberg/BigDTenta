@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage{subcaption}
 \newcommand{\xdashrightarrow}[2][]{\ext@arrow 0359\rightarrowfill@@{#1}{#2}}
+\usepackage{comment}
 
 \title{Big data 1}
 \author{Anton Rosenberg}
@@ -19,14 +20,14 @@
 \newpage
 \section{a}
 \subsection{Results}
-The three classifiers i choose to implement were Random forest, SVM and Logistic regression. Using these three methods stratisfied K fold was used with 5 folds and the scores of the models were averaged over the folds. Furthermore the entire process was run 100 times and the final scores were the mean of the scores during these runs see table \ref{score}. The only data prepossessing made was to normalise the data so that all features have values between 0 and 1.
+The three classifiers i choose to implement were Random forest, SVM and Logistic regression. Using these three methods stratisfied K fold was used with 5 folds to fit the hyper parameters for the SVM and Logistic regression model. Furthermore the entire process was run 100 times (monte carlo simulation) and the final scores were the mean of the scores during these runs see table \ref{score}. The only data prepossessing made was to normalise the data so that all features have values between 0 and 1.
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c}
         Model & accuracy & std & TPR & TNR \\
-         SVM & 0.814 & 0.056 & 0.818 & 0.808 \\
+         SVM & 0.846 & 0.056 & 0.825 & 0.87 \\
          Random forest & 0.75 & 0.065 & 0.781 & 0.714 \\
-         Logistic regression & 0.762 & 0.057 & 0.743 & 0.783
+         Logistic regression & 0.77 & 0.057 & 0.761 & 0.783
     \end{tabular}
     \caption{Scores for the different models}
     \label{score}
@@ -68,7 +69,7 @@ From the scores we can see that the SVM model preforms better than the others th
 \newpage
 \section{b}
 \subsection{Result}
-The three different methods used for finding the most important features were, select K best with chi2 score, variance filtering and linearSVC. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. 
+The three different classification methods used for finding the most important features were Logistic regression, Random Forest and linearSVC. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. 
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -125,13 +126,51 @@ We can see that both select K best and variance filtering seem to look mostly at
 \newpage
 \section{c}
 \subsection{Result}
-The clustering method used was gaussian mixture model and the data was preprocessed by normalization and using principle components. A cutoff at 0.03 was chosen to decide the numbber of PCA used (5) when transforming the data see figure \ref{scree}.  
+The clustering method used was gaussian mixture model and the data was preprocessed by normalization and using principle components. A cutoff at 0.03 was chosen to decide the number of PCA used which is indicated by the red line in figure \ref{scree}.   
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{1c/Scree plot.png}
     \caption{Caption}
     \label{scree}
 \end{figure}
+How well the clustering worked was measured by two factors: one how well the clusters agree with the class labels and the Silhouette score. In figure \ref{LabelOverlap} the percentage of dogs in each cluster can be seen for different amount of clusters with the remaining percentage being cats. From the figure one can see that having more than two clusters leads to several clusters having having around 40-60\% of dogs and cats in them which indicates that these clusters don't agree well with the class labels. Moreover the Silhouette score seen in table \ref{sill} seem to suggest that 3 clusters yield the best clustering. However the Silhouette score is low overall which indicates that there is a lot of overlap between the clusters.      
+\begin{figure}[ht]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1c/label overlapp 2 clusters.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1c/label overlapp 3 clusters.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1c/label overlapp 8 clusters.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{LabelOverlap}
+\end{figure}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|c|c|c}
+        # clusters & 2& 3& 4& 5& 6& 7& 8  \\
+       Silhouette score  & 0.111 & 0.133 & 0.115 & 0.119 &  0.125 &  0.115 &  0.112 \\
+       std & 0.026 &  0.027 &  0.027 &  0.026 &  0.021 &  0.027 &  0.025 
+    \end{tabular}
+    \caption{Caption}
+    \label{sill}
+\end{table}
+
+\begin{comment}
 \begin{figure}[ht]
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -150,6 +189,41 @@ The clustering method used was gaussian mixture model and the data was preproces
 \caption{Put your caption here}
 \label{imp pixels}
 \end{figure}
+\end{comment}
 \subsection{Discussion}
+Gaussian mixture model is a method which generally works quite well since it only assumes that the data can be split into normally distributed sub-classes however we can see that it struggles to produce well separated clusters containing only dogs and cats. This could be due to the fact that the cats and dogs data is not well separated which can be seen by looking at the pair plot of the data produced by the PCA prepossessing see figure \ref{pca}. PCA was choosen since we have a highcorrelation between many of the pixels (features) since it's a picture of an animal if one pixel has a color (rgb value) the ones next to it will in most cases have a similar value. As to which characteristics of the data the clustering picks up a similar feature selection as in 1b was made for the clusters containing most dogs and the one with most cats, for the dogs it seemed like the area around the right ear was the charactersistic picked up by the cluster whilst for the cats the entire right most side of the picture was the most important. It also seemed to be mostly dark cats in the cat majority cluster containing the cats whilst there were mostly brighter pictures in the dog majority cluster.       
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.3]{1c/True labels sns.png}
+    \caption{Caption}
+    \label{pca}
+\end{figure}
+\section{d}
+\subsection{Results}
+\begin{figure}[ht]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1d/Cats/siluette cats.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1d/Cats/davies cats.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1d/Cats/Calinski cats.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{LabelOverlap}
+\end{figure}
 
 \end{document}
