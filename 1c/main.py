@@ -4,7 +4,7 @@ from sklearn.svm import LinearSVC
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.utils import resample
-from sklearn.metrics import confusion_matrix, homogeneity_score, completeness_score, accuracy_score
+from sklearn.metrics import confusion_matrix, homogeneity_score, completeness_score, accuracy_score, silhouette_score
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 import numpy as np
@@ -80,6 +80,12 @@ def fix_pred(pred, true_val, num_clusters):
     return pred_new
 
 
+def get_label_cluster(y_pred, cluster):
+    label_cluster = []
+    indexes = np.where(y_pred==cluster)[0]
+    label_cluster.append(label.iloc[indexes])
+    return label_cluster
+
 if __name__ == '__main__':
     try:
         data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
@@ -116,14 +122,24 @@ if __name__ == '__main__':
 
     y_pred = kmeans.predict(data)
     '''
-    num_clusters = 2
+    num_clusters = 8
     gmm = GaussianMixture(n_components=num_clusters)
     y_pred = gmm.fit_predict(data)
 
-    y_pred = fix_pred(y_pred, label, num_clusters)
+    cluster_labels = [np.array(get_label_cluster(y_pred, cluster=i)).flatten() for i in range(num_clusters)]
+    overlap = [np.sum(cluster)/len(cluster) for cluster in cluster_labels]
+    print(overlap)
+    #y_pred = fix_pred(y_pred, label, num_clusters)
 
     print(accuracy_score(label, y_pred))
-    print(homogeneity_score(np.array(label).flatten(), y_pred))
+    print(silhouette_score(label, y_pred))
+
+    plt.figure()
+    plt.xlabel('Cluster #')
+    plt.ylabel('Precentage dogs in cluster')
+    plt.bar(range(num_clusters), overlap)
+    plt.xticks(range(num_clusters), range(num_clusters))
+    plt.show()
 
     data['labels'] = np_labels
 
@@ -133,7 +149,7 @@ if __name__ == '__main__':
 
     sns.pairplot(data, hue='labels', x_vars=[0, 1, 2, 3, 4], y_vars=[0, 1, 2, 3, 4])
 
-    plt.show()
+    #plt.show()
     '''
     print(y_pred)
     print(homogeneity_score(np.array(label).flatten(), y_pred))

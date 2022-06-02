@@ -7,6 +7,7 @@ from sklearn.utils import resample
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_classif
 from sklearn.feature_selection import SelectFromModel
 import numpy as np
 from matplotlib import pyplot as plt
