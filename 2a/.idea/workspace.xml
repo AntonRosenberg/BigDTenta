@@ -2,7 +2,103 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2028571d-9f75-440c-a050-5410762e6436" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../1e/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../1e/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 100, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/LogisticRegression, noise = 255, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 10" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 100" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 40" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 100, # noisy pics = 40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 10" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 100" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 40" beforeDir="false" afterPath="$PROJECT_DIR$/Precentage noisy in errors for , noise = 255, # noisy pics = 40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 100, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/RandomForest, noise = 255, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 100, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 100.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 100.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 40.png" beforeDir="false" afterPath="$PROJECT_DIR$/SVM, noise = 255, # noisy pics = 40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 10" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 100" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 40" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 100, # noisy pics = 40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 10" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 100" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 40" beforeDir="false" afterPath="$PROJECT_DIR$/Score for , noise = 255, # noisy pics = 40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 0.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 11.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 12.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 13.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 14.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 15.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 6.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 7.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 8.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 9.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/LogisticRegression, box num = 9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 0.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 11.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 12.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 13.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 14.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 15.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 6.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 7.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 8.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/RandomForest, box num = 9.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/RandomForest, box num = 9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 0.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 10.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 11.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 12.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 13.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 14.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 15.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 3.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 4.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 5.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 6.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 7.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 8.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/SVM, box num = 9.png" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/SVM, box num = 9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 0" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 0" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 1" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 10" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 11" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 11" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 12" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 13" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 13" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 14" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 14" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 15" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 15" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 2" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 3" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 4" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 5" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 6" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 7" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 8" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/Score for , box num = 9" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/Score for , box num = 9" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2b/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../2b/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +127,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../2b/main.py" />
   </component>
-  <component name="RunManager" selected="Python.main_2a">
+  <component name="RunManager" selected="Python.main_2b">
     <configuration name="main_2a" type="PythonConfigurationType" factoryName="Python">
       <module name="2a" />
       <option name="INTERPRETER_OPTIONS" value="" />

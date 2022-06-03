@@ -1,0 +1,3 @@
+SVM = 0.034482758620689655 
+ RandomForest = 0.02564102564102564 
+ LogisticRegression = 0.0

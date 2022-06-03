@@ -73,7 +73,7 @@ def get_noisy_errors(pics, err_pics):
     return len(noisy_errors)/len(err_pics)
 
 
-def main(num_pics, noise_level, num_runs):
+def main(num_pics, noise_level, num_runs, plot_list):
     try:
         data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
         label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
@@ -91,7 +91,7 @@ def main(num_pics, noise_level, num_runs):
     std = []
     tpr = []
     tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
+    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.3, random_state=8)
 
     k = 5
 
@@ -167,6 +167,8 @@ def main(num_pics, noise_level, num_runs):
 
     file.close()
 
+    # plot_list[0, pic_ind] = mean_score1
+
     #np.savetxt(f'Score for , noise = {noise_level}, # noisy pics = {num_pics}', f'SVM: accuracy = {mean_score1}, std = {std1}, tpr = {tpr1}, tnr = {tnr1} \n '
     #     f'RandomForest: accuracy = {mean_score2}, std = {std2}, tpr = {tpr2}, tnr = {tnr2} \n'
     #      f'LogisticRegression: accuracy = {mean_score3}, std = {std3}, tpr = {tpr3}, tnr = {tnr3}')
@@ -205,20 +207,23 @@ def main(num_pics, noise_level, num_runs):
 
     plot_err(wrong_list[0], data)
     '''
+
     plt.figure()
-    pic1 = np.array(data.iloc[8])
-    plt.title(f'label = {get_label(np.array(label.iloc[8]))}')
+    pic1 = np.array(data.iloc[37])
+    plt.title(f'label = {get_label(np.array(label.iloc[37]))}')
     plt.imshow(pic1.reshape(64, 64).T)
 
 
+    return plot_list
 
 if __name__ == '__main__':
     num_pic_list = [10, 40, 100]
     noise_level_list = [100, 255]
-    num_runs = 100
+    num_runs = 1
+    plot_list = np.zeros([3, len(num_pic_list)])
     for noise in noise_level_list:
         for num_pic in num_pic_list:
-            main(num_pic, noise, num_runs)
+            main(num_pic, noise, num_runs, plot_list)
 
 
 

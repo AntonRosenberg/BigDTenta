@@ -112,7 +112,7 @@ def get_hyper(model, X, y, params):
 
     return clf.best_params_['C']
 
-def main(num_runs, box_num):
+def main(num_runs, box_num, error_list, plot_list):
     try:
         data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
         label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
@@ -123,14 +123,27 @@ def main(num_runs, box_num):
     np_data = np.array(data)
     np_labels = np.array(label).flatten()
 
+    pic_num= 90
+    plt.figure()
+    pic1 = np.array(data.iloc[pic_num])
+    plt.title(f'label = {get_label(np.array(label.iloc[pic_num]))}')
+    plt.imshow(pic1.reshape(64, 64).T)
+    plt.show()
+
     data = get_16X16(np_data, box_num)
+
+    plt.figure()
+    pic1 = np.array(data.iloc[pic_num])
+    plt.title(f'label = {get_label(np.array(label.iloc[pic_num]))}')
+    plt.imshow(pic1.reshape(16, 16).T)
+    plt.show()
 
     wrong_list = []
     mean_score = []
     std = []
     tpr = []
     tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
+    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.3, random_state=8)
 
     k = 5
     models = [SVC(), RandomForestClassifier(), LogisticRegression(solver='liblinear', max_iter=1000, penalty='l2')]
@@ -193,8 +206,15 @@ def main(num_runs, box_num):
     file.write( f'SVM: accuracy = {mean_score1}, std = {std1}, tpr = {tpr1}, tnr = {tnr1} \n '
           f'RandomForest: accuracy = {mean_score2}, std = {std2}, tpr = {tpr2}, tnr = {tnr2} \n'
           f'LogisticRegression: accuracy = {mean_score3}, std = {std3}, tpr = {tpr3}, tnr = {tnr3}')
-
+    
     file.close()
+
+    error_list[0, index] = std1
+    plot_list[0, index] = mean_score1
+    error_list[1, index] = std2
+    plot_list[1, index] = mean_score2
+    error_list[2, index] = std3
+    plot_list[2, index] = mean_score3
 
     #np.savetxt(f'Score for , noise = {noise_level}, # noisy pics = {num_pics}', f'SVM: accuracy = {mean_score1}, std = {std1}, tpr = {tpr1}, tnr = {tnr1} \n '
     #     f'RandomForest: accuracy = {mean_score2}, std = {std2}, tpr = {tpr2}, tnr = {tnr2} \n'
@@ -239,11 +259,20 @@ def main(num_runs, box_num):
 
 if __name__ == '__main__':
     box_num_list=range(16)
-    num_runs = 100
-    for box_num in box_num_list:
-        main(num_runs, box_num)
-
-
+    num_runs = 1
+    error_list = np.zeros([3, 16])
+    plot_list = np.zeros([3, 16])
+    for index, box_num in enumerate(box_num_list):
+        main(num_runs, box_num, error_list, plot_list)
+    plt.figure()
+    plt.title('Score as a function of box number')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Box number')
+    models = ['SVM', 'RandomForest', 'Logistic regresion']
+    for i in range(3):
+        plt.errorbar(box_num_list, plot_list[i,:], error_list[i,:], label=models[i])
+    plt.legend()
+    plt.show()
 
 
 
