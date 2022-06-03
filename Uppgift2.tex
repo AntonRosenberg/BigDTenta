@@ -61,6 +61,25 @@ During this task noise was added to a random set of pictures
     \caption{Caption}
     \label{tab:my_label}
 \end{table}
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2a/pic.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2a/Noisy pic.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{wrong}
+\end{figure}
+
 \section{b}
 \subsection{Results}
 \subsection{Conclusion}
