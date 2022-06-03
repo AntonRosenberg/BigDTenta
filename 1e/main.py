@@ -256,7 +256,7 @@ def run_1b(data, label):
 
         count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
 
-        lsvc = LinearSVC(C=9, penalty="l1", dual=False, max_iter=10000)
+        lsvc = SVC(C=9, kernel='linear', max_iter=10000)
         lsvc.fit(X_boot, y_boot.values.ravel())
         model = SelectFromModel(lsvc, prefit=True)
         lsvc_features = model.get_support(indices=True)
