@@ -98,7 +98,9 @@ def main(num_pics, noise_level, num_runs):
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
+        params_SVC = 9.236708571873866
+        params_LogReg = 0.05736152510448681
+        models = [SVC(C=params_SVC), RandomForestClassifier(), LogisticRegression(C=params_LogReg,max_iter=1000, penalty='l2')]
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):
@@ -107,7 +109,7 @@ def main(num_pics, noise_level, num_runs):
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
                 prediction = model.predict(X_test)
-                score[ind, fold_ind]=(model.score(X_test, y_test))
+                score[ind, fold_ind]=(model.score(x_te, y_te))
                 tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
                 wrong_list.append(check_predictions(prediction, y_test))
                 tpr.append(tp/(tp+fn))
@@ -124,9 +126,9 @@ def main(num_pics, noise_level, num_runs):
     histo2 = histogram(wrong_list_m2)
     histo3 = histogram(wrong_list_m3)
 
-    err_pics1 = [ind for ind, value in enumerate(histo1) if value > 0.8 * num_runs]
-    err_pics2 = [ind for ind, value in enumerate(histo2) if value > 0.8 * num_runs]
-    err_pics3 = [ind for ind, value in enumerate(histo3) if value > 0.8 * num_runs]
+    err_pics1 = [ind for ind, value in enumerate(histo1) if value > 0.7 * num_runs]
+    err_pics2 = [ind for ind, value in enumerate(histo2) if value > 0.7 * num_runs]
+    err_pics3 = [ind for ind, value in enumerate(histo3) if value > 0.7 * num_runs]
 
     svm_noise_err = get_noisy_errors(pics, err_pics1)
     RandForest_noise_err = get_noisy_errors(pics, err_pics2)

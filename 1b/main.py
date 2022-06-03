@@ -99,7 +99,7 @@ if __name__ == '__main__':
         LogReg_features = model.get_support(indices=True)
         X_LogReg = model.transform(X_boot)
 
-        count_feat = count(feat_list=LogReg_features, count_list=count_feat, ind=0)
+        count(feat_list=LogReg_features, count_list=count_feat, ind=0)
 
         RandForest = RandomForestClassifier()
         RandForest.fit(X_boot, y_boot.values.ravel())
@@ -107,15 +107,15 @@ if __name__ == '__main__':
         RandForest_features = model.get_support(indices=True)
         X_RandForest = model.transform(X_boot)
 
-        count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
+        count(feat_list=RandForest_features, count_list=count_feat, ind=1)
 
-        lsvc = LinearSVC(C=9, penalty="l1", dual=False, max_iter=10000)
+        lsvc = SVC(C=9, kernel='linear', max_iter=10000)
         lsvc.fit(X_boot, y_boot.values.ravel())
         model = SelectFromModel(lsvc, prefit=True)
         lsvc_features = model.get_support(indices=True)
         X_lsvc = model.transform(X_boot)
 
-        count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
+        count(feat_list=lsvc_features, count_list=count_feat, ind=2)
 
         print(len(LogReg_features), np.shape(X_LogReg))
         print(len(RandForest_features), np.shape(X_RandForest))

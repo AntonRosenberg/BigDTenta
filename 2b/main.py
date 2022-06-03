@@ -11,6 +11,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.model_selection import StratifiedKFold
 from tqdm import trange
+from sklearn.model_selection import GridSearchCV
 import random
 
 def histogram(wrong_list):
@@ -97,6 +98,20 @@ def get_16X16(data, box_num):
 
     return pd.DataFrame(boxes)
 
+def get_hyper(model, X, y, params):
+
+    results = pd.DataFrame(columns=['model', 'params'])
+
+
+
+    clf = GridSearchCV(model, params, cv=5)
+    clf.fit(X, y.values.ravel())
+    row = {'model': model, 'params': clf.best_params_}
+    print(clf.best_params_['C'])
+
+
+    return clf.best_params_['C']
+
 def main(num_runs, box_num):
     try:
         data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
@@ -118,11 +133,15 @@ def main(num_runs, box_num):
     x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
 
     k = 5
+    models = [SVC(), RandomForestClassifier(), LogisticRegression(solver='liblinear', max_iter=1000, penalty='l2')]
+    params_SVC = get_hyper(models[0], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
+    params_LogReg = get_hyper(models[2], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
 
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
+        models = [SVC(C=params_SVC), RandomForestClassifier(),
+                  LogisticRegression(C=params_LogReg, max_iter=1000, penalty='l2')]
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):
@@ -131,7 +150,7 @@ def main(num_runs, box_num):
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
                 prediction = model.predict(X_test)
-                score[ind, fold_ind]=(model.score(X_test, y_test))
+                score[ind, fold_ind]=(model.score(x_te, y_te))
                 tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
                 wrong_list.append(check_predictions(prediction, y_test))
                 tpr.append(tp/(tp+fn))
