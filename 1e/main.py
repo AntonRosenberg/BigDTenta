@@ -62,10 +62,10 @@ def plot_err(errors, df):
         plt.imshow(pic)
 
 
-def plot_feat(feat_list, method, data, label):
+def plot_feat(feat_list, method):
     plt.figure()
-    pic1 = np.array(data.iloc[0])
-    plt.title(f'label = {get_label(np.array(label.iloc[0]))}, '+method)
+    pic1 = np.array(data.iloc[2])
+    plt.title(f'label = {get_label(np.array(label.iloc[2]))}, '+method)
     plt.imshow(pic1.reshape(64, 64).T)
     image = np.zeros(np.shape(data)[1])
     for feat in feat_list:
@@ -110,15 +110,24 @@ def run_1a(data, label):
     std = []
     tpr = []
     tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
+    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
 
     num_runs = 100
     k = 5
+    ###################
 
+    ###########################
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000)]
+        models = [SVC(), RandomForestClassifier(), LogisticRegression(solver='liblinear', max_iter=1000, penalty='l2')]
+        # params_SVC = get_hyper(models[0], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
+        # params_LogReg = get_hyper(models[2], x_tr, y_tr, params = [{'C': np.logspace(-4,4,30)}])
+        params_SVC = 9.236708571873866
+        params_LogReg = 0.05736152510448681
+        models = [SVC(C=params_SVC), RandomForestClassifier(),
+                  LogisticRegression(C=params_LogReg, max_iter=1000, penalty='l2')]
+
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):
@@ -126,17 +135,12 @@ def run_1a(data, label):
             y_train, y_test = y_tr.iloc[train_index], y_tr.iloc[test_index]
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
-                prediction = model.predict(X_test)
-                score[ind, fold_ind]=(model.score(X_test, y_test))
-                #tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
-                confusion_mat = confusion_matrix(y_test, prediction)
-                fp = confusion_mat.sum(axis=0) - np.diag(confusion_mat)
-                fn = confusion_mat.sum(axis=1) - np.diag(confusion_mat)
-                tp = np.diag(confusion_mat)
-                tn = confusion_mat.sum() - (fp + fn + tp)
-                wrong_list.append(check_predictions(prediction, y_test))
-                tpr.append(tp/(tp+fn))
-                tnr.append(tn/(tn+fp))
+                prediction = model.predict(x_te)
+                score[ind, fold_ind] = (model.score(x_te, y_te))
+                tn, fp, fn, tp = confusion_matrix(y_te, prediction).ravel()
+                wrong_list.append(check_predictions(model.predict(X_train), y_train))
+                tpr.append(tp / (tp + fn))
+                tnr.append(tn / (tn + fp))
             fold_ind += 1
         mean_score.append(np.mean(score, axis=1))
         std.append(np.std(score, axis=1))
@@ -150,7 +154,7 @@ def run_1a(data, label):
     histo3 = histogram(wrong_list_m3)
 
     tnr1 = [tnr[i] for i in range(0, len(tnr), len(models))]
-    tnr1 = sum(tnr1)/len(tnr1)
+    tnr1 = sum(tnr1) / len(tnr1)
     tnr2 = [tnr[i] for i in range(1, len(tnr), len(models))]
     tnr2 = sum(tnr2) / len(tnr2)
     tnr3 = [tnr[i] for i in range(2, len(tnr), len(models))]
@@ -163,7 +167,6 @@ def run_1a(data, label):
     tpr3 = [tpr[i] for i in range(2, len(tpr), len(models))]
     tpr3 = sum(tpr3) / len(tpr3)
 
-
     mean_score1 = get_scores(mean_score, 0)
     mean_score2 = get_scores(mean_score, 1)
     mean_score3 = get_scores(mean_score, 2)
@@ -175,17 +178,48 @@ def run_1a(data, label):
     print(f'SVM: accuracy = {mean_score1}, std = {std1}, tpr = {tpr1}, tnr = {tnr1} \n '
           f'RandomForest: accuracy = {mean_score2}, std = {std2}, tpr = {tpr2}, tnr = {tnr2} \n'
           f'LogisticRegression: accuracy = {mean_score3}, std = {std3}, tpr = {tpr3}, tnr = {tnr3}')
+    file = open(f'Score', 'w')
+    file.write(f'SVM: accuracy = {mean_score1}, std = {std1}, tpr = {tpr1}, tnr = {tnr1} \n '
+               f'RandomForest: accuracy = {mean_score2}, std = {std2}, tpr = {tpr2}, tnr = {tnr2} \n'
+               f'LogisticRegression: accuracy = {mean_score3}, std = {std3}, tpr = {tpr3}, tnr = {tnr3}')
+
+    file.close()
 
     plt.figure()
     plt.title('SVM')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo1)
     plt.figure()
     plt.title('RandomForest')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo2)
     plt.figure()
     plt.title('LogisticRegression')
+    plt.xlabel('Pic #')
+    plt.ylabel('Wrongly classified count')
     plt.bar(range(len(histo1)), histo3)
 
+    '''
+    ones = np.size(label.index[label.index == 1])
+    zeroes = np.size(label.index[label.index == 0])
+
+    scores = [cross_val_score(model, data, label.values.ravel(), cv=5, scoring='accuracy') for model in models]
+
+    print(scores)
+
+    wrong_list = [check_predictions(model.fit(x_train, y_train).predict(x_test), y_test) for model in models]
+    print(wrong_list)
+
+    plot_err(wrong_list[0], data)
+    '''
+    '''
+    plt.figure()
+    pic1 = np.array(data.iloc[8])
+    plt.title(f'label = {get_label(np.array(label.iloc[8]))}')
+    plt.imshow(pic1.reshape(64, 64).T)
+    '''
     plt.show()
 
 
@@ -197,29 +231,32 @@ def run_1b(data, label):
     num_runs = 100
     threshold = 0.8
 
-    method=['Variance', 'SelectKbest', 'Linear svc']
+    num_runs = 100
+    threshold = 0.5
+
+    method = ['Logistic Regression', 'Random Forest', 'Linear svc']
 
     count_feat = np.zeros([3, np.shape(data)[1]])
     for i in trange(num_runs):
         X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
 
-        mean_var = np.mean(X_boot.var(axis=1))
-        std_var = np.std(X_boot.var(axis=1))
-        sel = VarianceThreshold(threshold=(mean_var + std_var))
-        sel.fit(X_boot)
-        var_features = sel.get_support(indices=True)
-        X_var = sel.fit_transform(X_boot)
+        LogReg = LogisticRegression(C=0.05736152510448681, max_iter=1000)
+        LogReg.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(LogReg, prefit=True)
+        LogReg_features = model.get_support(indices=True)
+        X_LogReg = model.transform(X_boot)
 
-        count_feat = count(feat_list=var_features, count_list=count_feat, ind=0)
+        count_feat = count(feat_list=LogReg_features, count_list=count_feat, ind=0)
 
-        selK = SelectKBest(chi2, k=500)
-        selK.fit(X_boot, y_boot)
-        selK_features = selK.get_support(indices=True)
-        X_selK = selK.fit_transform(X_boot, y_boot)
+        RandForest = RandomForestClassifier()
+        RandForest.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(RandForest, prefit=True)
+        RandForest_features = model.get_support(indices=True)
+        X_RandForest = model.transform(X_boot)
 
-        count_feat = count(feat_list=selK_features, count_list=count_feat, ind=1)
+        count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
 
-        lsvc = LinearSVC(C=500, penalty="l1", dual=False, max_iter=10000)
+        lsvc = LinearSVC(C=9, penalty="l1", dual=False, max_iter=10000)
         lsvc.fit(X_boot, y_boot.values.ravel())
         model = SelectFromModel(lsvc, prefit=True)
         lsvc_features = model.get_support(indices=True)
@@ -227,25 +264,25 @@ def run_1b(data, label):
 
         count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
 
-        print(len(var_features), np.shape(X_var))
-        print(len(selK_features), np.shape(X_selK))
+        print(len(LogReg_features), np.shape(X_LogReg))
+        print(len(RandForest_features), np.shape(X_RandForest))
         print(len(lsvc_features), np.shape(X_lsvc))
 
     plt.figure()
-    plt.title('Variance filtering')
+    plt.title('Logistic Regression')
     plt.bar(range(np.shape(data)[1]), count_feat[0, :])
     plt.figure()
-    plt.title('Select K best, chi2 score')
+    plt.title('Random Forest')
     plt.bar(range(np.shape(data)[1]), count_feat[1, :])
     plt.figure()
     plt.title('Linear svc')
     plt.bar(range(np.shape(data)[1]), count_feat[2, :])
 
-    count_feat[count_feat < num_runs*threshold] = 0
+    count_feat[count_feat < num_runs * threshold] = 0
 
     for i in range(len(count_feat[:, 0])):
         feat_list = np.nonzero(count_feat[i, :])
-        plot_feat(feat_list[0], method[i], data, label)
+        plot_feat(feat_list[0], method[i])
 
     plt.show()
 
@@ -266,7 +303,7 @@ if __name__ == '__main__':
     pca = PCA()
     #pca.fit(cats)
     pca.fit(dogs)
-    cut_off = 0.03
+    cut_off = 0.01
     PC_values = np.arange(pca.n_components_) + 1
     plt.plot(PC_values, pca.explained_variance_ratio_, 'o-', linewidth=2)
     plt.axhline(cut_off, color="red")
@@ -293,7 +330,7 @@ if __name__ == '__main__':
     print(type(y_pred))
 
     #run_1a(cats_pca, y_pred)
-    run_1a(dogs_pca, y_pred)
+    #run_1a(dogs_pca, y_pred)
 
     run_1b(dogs, y_pred)
 

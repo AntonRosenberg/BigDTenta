@@ -168,8 +168,8 @@ if __name__ == '__main__':
 
             # run_1b(pd.DataFrame(indexes[index_min]))
 
-            plot_pic(pics[index_min], i=index_min)
-            plt.show()
+            #plot_pic(pics[index_min], i=index_min)
+            #plt.show()
 
             dogs['labels'] = label_dogs
 

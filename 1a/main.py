@@ -106,12 +106,12 @@ if __name__ == '__main__':
             y_train, y_test = y_tr.iloc[train_index], y_tr.iloc[test_index]
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
-                prediction = model.predict(x_tr)
-                score[ind, fold_ind]=(model.score(x_te, y_te))
+                prediction = model.predict(x_te)
+                score[ind, fold_ind] = (model.score(x_te, y_te))
                 tn, fp, fn, tp = confusion_matrix(y_te, prediction).ravel()
-                wrong_list.append(check_predictions(prediction, y_te))
-                tpr.append(tp/(tp+fn))
-                tnr.append(tn/(tn+fp))
+                wrong_list.append(check_predictions(model.predict(X_train), y_train))
+                tpr.append(tp / (tp + fn))
+                tnr.append(tn / (tn + fp))
             fold_ind += 1
         mean_score.append(np.mean(score, axis=1))
         std.append(np.std(score, axis=1))

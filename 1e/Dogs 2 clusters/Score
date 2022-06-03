@@ -1,0 +1,3 @@
+SVM: accuracy = 0.8894285714285713, std = 0.020640184366959503, tpr = 0.854875, tnr = 1.0 
+ RandomForest: accuracy = 0.9016190476190465, std = 0.006138046642169837, tpr = 0.87125, tnr = 0.9988 
+LogisticRegression: accuracy = 0.9046666666666648, std = 0.00019047619047619067, tpr = 0.874875, tnr = 1.0
