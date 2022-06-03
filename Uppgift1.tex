@@ -205,7 +205,8 @@ The clusters don't seem to agree to well with the class labels since no number o
 \newpage
 \section{d}
 \subsection{Results}
-Firstly the data was split into cats and dogs then the same process as in c was made with gmm. However now three internal indicies were looked at in order to find the appropriate cluster number for both data sets see figure \ref{Int indiciees} and figure \ref{Int indiciees dog}. 
+Firstly the data was split into cats and dogs then the same process as in c was made with gmm. However now three internal indices were looked at in order to find the appropriate cluster number for both data sets see figure \ref{Int indiciees} and figure \ref{Int indiciees dog} where the clustering was made for each number of clusters 100 times and the mean value of the internal indices used. As for the Cats based on all three index values shown in \ref{Int indiciees} three clusters would be the best whilst two looks like the best option for the dogs. The reason why there are three clusters of cats whilst only two for dogs could perhaps be explained by the fact that cats have more groups of similar features e.g. if the cats have three distinct colors whilst the dogs mostly only have two. As to which characteristics of the data the different clusters pick up it was difficult to see a clear pattern by looking at the pictures in each cluster see figure \ref{} and figure \ref{}  
+\subsection{Conclusions}
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -256,5 +257,35 @@ Firstly the data was split into cats and dogs then the same process as in c was 
 \caption{Put your caption here}
 \label{Int indiciees dog}
 \end{figure}
-
+\begin{figure}[ht]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1d/Dogs/siluette dog.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1d/Dogs/Davies_dog.png}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{}  
+  \caption{Put your sub-caption here}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{Int indiciees dog}
+\end{figure}
+\section{e}
+\subsection{Results}
+\subsection{Conclusions}
+\section{f}
+\subsection{Results}
+\subsection{Conclusions}
 \end{document}
