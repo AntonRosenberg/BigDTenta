@@ -305,29 +305,30 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
 \newpage
 \section{e}
 \subsection{Results}
-
+The dogs were clustered into two clusters and the cats into three based on the results from d. The same bootstrapping method used in b was then implemented for finding the important features for each classifier. Since we now are classifying only dogs and cats separately there should be different features which are of importance compared to b. The reasoning behind this is that the different types of dogs have different pixels which separates them from each other than the ones important for separating dogs from cats, the same goes for the cats. Looking at figures \ref{LogReg dog} and \ref{LogReg cat} one can see that the features which the logistic regression deems important follows the outlines of the cats and dogs and seems to look at most parts of the pictures for classifying them to a certain cluster. The Ranbdom Forest algorithm seems to look at very specific pixels for the dogs data set with only a couple of pixels being selected over 80\% during the bootstrapping see figure \ref{rndf selection}. This differs from the results in b and the one for the cats see figure \ref{rndf selection cat} where the feature selection isn't as confident on which pixels to choose. This could be due to the fact that larger groups of highly correlated features are given lesser relevance than smaller ones in the random forest algorithm and since we are looking at a picture it's not unreasonable to assume that there are large clusters of pixels with high correlation. As for the linear SVM model the model seems to have a difficult time selecting any features with confidence see figures \ref{svc selection} and \ref{linear svc selection cat}. This could be due to the fact that using a hyperplane to seperate cats from cats or dogs from dogs is a poor idea so this could be an effect of the linear kernal used. 
 \subsection{Conclusions}
+In conclusion it's clear that the logistic regression looks at many parts of the picture and has high confidence in a lot of its feature selections whilst the Random Forrest behaves differently and has a few pixels with high confidence which it deems important whilst the linear svm model struggles to select any important pixels consistently. 
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp feat RandomForest pic.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-first}
+  \label{rndf selection}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp_feat Linear svc.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-second}
+  \label{}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp feat LogisticRegression.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-second}
+  \label{LogReg dog}
 \end{subfigure}
 \caption{Put your caption here}
 \label{example dog}
@@ -345,7 +346,7 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection linear svc.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-second}
+  \label{svc selection}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -357,33 +358,61 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
 \caption{Put your caption here}
 \label{example dog}
 \end{figure}
+
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection Random Forest.png}  
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat RandomForest.png}  
   \caption{Put your sub-caption here}
-  \label{fig:sub-first}
+  \label{}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection linear svc.png}  
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat linear svc bra.png}  
   \caption{Put your sub-caption here}
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1e}  
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat LogReg.png}  
+  \caption{Put your sub-caption here}
+  \label{LogReg cat}
+\end{subfigure}
+\caption{Put your caption here}
+\label{example dog}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected RandomForest.png}  
+  \caption{Put your sub-caption here}
+  \label{rndf selection cat}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected LinearSvc.png}  
+  \caption{Put your sub-caption here}
+  \label{linear svc selection cat}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected LogReg.png}  
   \caption{Put your sub-caption here}
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
 \label{example dog}
 \end{figure}
+
 \newpage
 \section{f}
 \subsection{Results}
 \subsection{Conclusions}
+
 \end{document}
