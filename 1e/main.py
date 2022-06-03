@@ -64,8 +64,8 @@ def plot_err(errors, df):
 
 def plot_feat(feat_list, method):
     plt.figure()
-    pic1 = np.array(data.iloc[2])
-    plt.title(f'label = {get_label(np.array(label.iloc[2]))}, '+method)
+    pic1 = np.array(data.iloc[0])
+    plt.title(f'label = {get_label(np.array(label.iloc[0]))}, '+method)
     plt.imshow(pic1.reshape(64, 64).T)
     image = np.zeros(np.shape(data)[1])
     for feat in feat_list:
@@ -301,8 +301,8 @@ if __name__ == '__main__':
     dogs, label_dogs, cats, label_cats = separate_data(data, label)
 
     pca = PCA()
-    #pca.fit(cats)
-    pca.fit(dogs)
+    pca.fit(cats)
+    #pca.fit(dogs)
     cut_off = 0.01
     PC_values = np.arange(pca.n_components_) + 1
     plt.plot(PC_values, pca.explained_variance_ratio_, 'o-', linewidth=2)
@@ -321,18 +321,18 @@ if __name__ == '__main__':
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
 
-    #num_clusters = 5 # Cats
-    num_clusters = 2 # Dogs
+    num_clusters = 3 # Cats
+    #num_clusters = 2 # Dogs
 
     gmm = GaussianMixture(n_components=num_clusters)
     #y_pred = pd.DataFrame(gmm.fit_predict(cats_pca))
-    y_pred = pd.DataFrame(gmm.fit_predict(dogs_pca))
+    y_pred = pd.DataFrame(gmm.fit_predict(cats_pca))
     print(type(y_pred))
 
     #run_1a(cats_pca, y_pred)
     #run_1a(dogs_pca, y_pred)
 
-    run_1b(dogs, y_pred)
+    run_1b(cats, y_pred)
 
 
 
