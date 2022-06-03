@@ -20,19 +20,51 @@
 \newpage
 \section{a}
 \subsection{Results}
+During this task noise was added to a random set of pictures 
 \subsection{Conclusions}
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|c|c|c|c}
-        Number noisy pics &    \\
-       Noise level  & \\
-       Score \\
-       Std \\
-       Precentage noise in errors
+    \begin{tabular}{c|c|c|c|c|c|c|c}
+   Model: SVM \\
+    Noise level  & 100 & 100 & 100 & 255 & 255 & 255 \\
+       Number noisy pics & 10 & 40 & 100 & 10& 40 & 100 \\
+        Percentage noise in errors & 0.08& 0.1 & 0.67 & 0.12& 0.38& 0.67  \\
+       Accuracy & 0.76 & 0.74 & 0.66 & 0.67 & 0.68 & 0.65 \\
+       Std & 0.03& 0.04 & 0.05 & 0.03 & 0.05 & 0.05\\
     \end{tabular}
     \caption{Caption}
     \label{tab:my_label}
 \end{table}
+\begin{table}[H]
+\centering
+    \begin{tabular}{c|c|c|c|c|c|c|c}
+   Model: Logistic Regression \\
+    Noise level  & 100 & 100 & 100 & 255 & 255 & 255 \\
+       Number noisy pics & 10 & 40 & 100 & 10& 40 & 100 \\
+        Percentage noise in errors & 0.13& 0.15 & 0.51 & 0.12 & 0.45& 0.62  \\
+       Accuracy & 0.75 & 0.77 & 0.74 & 0.76 & 0.73 & 0.7 \\
+       Std & 0.04& 0.05 & 0.06 & 0.05 & 0.05 & 0.05\\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}
+\begin{table}[H]
+\centering
+    \begin{tabular}{c|c|c|c|c|c|c|c}
+   Model: Random Forest \\
+    Noise level  & 100 & 100 & 100 & 255 & 255 & 255 \\
+       Number noisy pics & 10 & 40 & 100 & 10& 40 & 100 \\
+        Percentage noise in errors & 0.04& 0.23 & 0.4 & 0.03 & 0.13& 0.45\\
+       Accuracy & 0.79 & 0.8 & 0.77 & 0.77 & 0.74 & 0.7 \\
+       Std & 0.03& 0.03 & 0.04 & 0.06 & 0.04 & 0.05\\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}
+\section{b}
+\subsection{Results}
+\subsection{Conclusion}
+\begin{comment}
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -64,4 +96,5 @@
     \caption{Faulty data}
     \label{faulty data}
 \end{figure}
+\end{comment}
 \end{document}
