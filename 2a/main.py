@@ -209,17 +209,17 @@ def main(num_pics, noise_level, num_runs, plot_list):
     '''
 
     plt.figure()
-    pic1 = np.array(data.iloc[37])
-    plt.title(f'label = {get_label(np.array(label.iloc[37]))}')
+    pic1 = np.array(data.iloc[21])
+    plt.title(f'label = {get_label(np.array(label.iloc[21]))}')
     plt.imshow(pic1.reshape(64, 64).T)
-
+    plt.show()
 
     return plot_list
 
 if __name__ == '__main__':
     num_pic_list = [10, 40, 100]
     noise_level_list = [100, 255]
-    num_runs = 1
+    num_runs = 100
     plot_list = np.zeros([3, len(num_pic_list)])
     for noise in noise_level_list:
         for num_pic in num_pic_list:
