@@ -116,6 +116,26 @@ def get_cat_subset(data, labels):
 
     return cats, label_cats, test_data, test_labels
 
+def get_label_cluster(y_pred, cluster):
+    label_cluster = []
+    indexes = np.where(y_pred==cluster)[0]
+    label_cluster.append(label.iloc[indexes])
+
+    return label_cluster
+
+def get_pics(y_pred, data, cluster):
+    indexes = np.where(y_pred == cluster)[0]
+    pics = data.iloc[indexes]
+
+    return np.array(pics), indexes
+
+def plot_pic(pics, i):
+    for pic in pics:
+
+        pic1 = np.array(pic)
+        plt.title(f'Cluster number = '+str(i))
+        plt.imshow(pic1.reshape(64, 64).T)
+        plt.show()
 
 def run_1a(data, label):
     np_data = np.array(data)
@@ -243,23 +263,71 @@ if __name__ == '__main__':
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
 
-    num_clusters = 5
+    num_clusters = 3
     # Cats
     #num_clusters = 2 # Dogs
     num_runs = 100
     score=[]
+    avg_overlap=[]
+    sil_score = []
     for i in trange(num_runs):
         gmm = GaussianMixture(n_components=num_clusters)
         y_pred = pd.DataFrame(gmm.fit_predict(cats_pca))
         #y_pred = pd.DataFrame(gmm.fit_predict(dogs_pca))antros
 
-        svm = SVC()
+        svm = LogisticRegression(C=0.05736152510448681, max_iter=1000)
         svm.fit(cats, y_pred.values.ravel())
 
-        score.append(svm.score(test_data, test_labels))
+        #score.append(svm.score(test_data, test_labels))
         pred = svm.predict(test_data)
-    print(pred)
-    print(np.mean(score), np.std(score))
+        cluster_labels = [np.array(get_label_cluster(y_pred, cluster=i)).flatten() for i in range(num_clusters)]
+        overlap = [np.sum(cluster) / len(cluster) for cluster in cluster_labels]
+
+        avg_overlap.append(np.sort(overlap))
+
+        pics = [get_pics(y_pred, data, i)[0] for i in range(num_clusters)]
+        indexes = [get_pics(y_pred, data, i)[1] for i in range(num_clusters)]
+        index_max = np.argmax(overlap)
+        index_min = np.argmin(overlap)
+
+        # run_1b(pd.DataFrame(indexes[index_min]))
+
+        # plot_pic(pics[index_min], i=index_min)
+        # plt.show()
+        '''
+        for i, pic in enumerate(pics):
+            print(f' pic = {pic}')
+            plot_pic(pic, i)
+            plt.show()
+        '''
+        sil_score.append(silhouette_score(cats, y_pred.values.ravel()))
+
+    avg = np.zeros(3)
+    std = np.zeros(3)
+    avg[0] = np.mean([avg_overlap[i] for i in range(0, len(avg_overlap), 3)])
+    std[0] = np.std([avg_overlap[i] for i in range(0, len(avg_overlap), 3)])
+    avg[1] = np.mean([avg_overlap[i] for i in range(1, len(avg_overlap), 3)])
+    std[1] = np.std([avg_overlap[i] for i in range(1, len(avg_overlap), 3)])
+    avg[2] = np.mean([avg_overlap[i] for i in range(2, len(avg_overlap), 3)])
+    std[2] = np.std([avg_overlap[i] for i in range(2, len(avg_overlap), 3)])
+    plt.figure()
+    plt.xlabel('Cluster #')
+    plt.ylabel('Precentage dogs in cluster')
+    plt.bar(range(num_clusters), avg)
+    plt.xticks(range(num_clusters), range(num_clusters))
+    plt.errorbar(range(num_clusters), avg, std, linestyle='None', marker='^', ecolor='red')
+    print(std, avg)
+
+    plt.show()
+    plt.close('all')
+
+    sil_score_avg = round(np.mean(sil_score), 3)
+    sil_score_std = round(np.std(sil_score), 3)
+
+    file = open(f'cluster num = {num_clusters}', 'w')
+    file.write(
+        f'SilScore = {sil_score_avg}, silstd = {sil_score_std}')
+    file.close()
 
     # run_1a(cats_pca, y_pred)
     #run_1a(dogs_pca, y_pred)
