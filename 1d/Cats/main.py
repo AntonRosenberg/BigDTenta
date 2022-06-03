@@ -91,6 +91,19 @@ def separate_data(data, labels):
 
     return dogs, label_dogs, cats, label_cats
 
+def plot_pic(pics, i):
+    for pic in pics:
+
+        pic1 = np.array(pic)
+        plt.title(f'Cluster number = '+str(i))
+        plt.imshow(pic1.reshape(64, 64).T)
+        plt.show()
+
+def get_pics(y_pred, data, cluster):
+    indexes = np.where(y_pred == cluster)[0]
+    pics = data.iloc[indexes]
+
+    return np.array(pics), indexes
 
 if __name__ == '__main__':
     try:
@@ -119,7 +132,7 @@ if __name__ == '__main__':
     num_pca = len(pca.explained_variance_ratio_[pca.explained_variance_ratio_ > cut_off])
     print(f'num_pca choosen = {num_pca}')
     pca = PCA(n_components=num_pca)
-    cats = pd.DataFrame(pca.fit_transform(cats))
+    cats_pca = pd.DataFrame(pca.fit_transform(cats))
 
     #x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.2, random_state=8)
     #TODO träna på trainoch kör på test
@@ -131,22 +144,32 @@ if __name__ == '__main__':
     y_pred = kmeans.predict(data)
     '''
     num_runs=100
-    num_cluster_list=range(2, 21)
+    num_cluster_list=range(3, 4)
     silhouette = np.zeros([num_runs, len(num_cluster_list)])
     calinski = np.zeros([num_runs, len(num_cluster_list)])
     davies = np.zeros([num_runs, len(num_cluster_list)])
     for i in trange(num_runs):
         for j, num_clusters in enumerate(num_cluster_list):
             gmm = GaussianMixture(n_components=num_clusters)
-            y_pred = gmm.fit_predict(cats)
+            y_pred = gmm.fit_predict(cats_pca)
 
             #y_pred = fix_pred(y_pred, label_dogs, num_clusters)
 
             #print(f'accuracy = {accuracy_score(label_cats, y_pred)}, silhuette score = {silhouette_score(cats, y_pred)}')
             #print(homogeneity_score(np.array(label_dogs).flatten(), y_pred))
-            silhouette[i,j] = silhouette_score(cats, y_pred)
-            calinski[i,j] = calinski_harabasz_score(cats, y_pred)
-            davies[i,j] = davies_bouldin_score(cats, y_pred)
+            silhouette[i,j] = silhouette_score(cats_pca, y_pred)
+            calinski[i,j] = calinski_harabasz_score(cats_pca, y_pred)
+            davies[i,j] = davies_bouldin_score(cats_pca, y_pred)
+
+            pics = [get_pics(y_pred, cats, i)[0] for i in range(num_clusters)]
+            indexes = [get_pics(y_pred, cats, i)[1] for i in range(num_clusters)]
+
+            index_min=2
+
+            # run_1b(pd.DataFrame(indexes[index_min]))
+
+            #plot_pic(pics[index_min], i=index_min)
+            #plt.show()
             '''
             cats['labels'] = label_cats
     
