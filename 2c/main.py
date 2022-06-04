@@ -11,7 +11,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.model_selection import StratifiedKFold
 from tqdm import trange
+from sklearn.feature_selection import SelectFromModel
 import random
+from sklearn.utils import resample
 
 def histogram(wrong_list):
     histo = np.zeros(198)
@@ -73,6 +75,40 @@ def get_noisy_errors(pics, err_pics):
             noisy_errors.append(ind)
     return len(noisy_errors)/len(err_pics)
 
+def plot_err(errors, df):
+    pics = [df[df.index == error] for error in errors]
+    print(errors)
+    pics = [np.array(pic).reshape(64, 64).T for pic in pics]
+    for pic in pics:
+        # plt.title(f'label = {label[label.index==errors]}')
+        plt.imshow(pic)
+
+
+def plot_feat(feat_list, method):
+    try:
+        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
+    except:
+        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/Labels.csv")
+
+    plt.figure()
+    pic1 = np.array(data.iloc[2])
+    plt.title(f'label = {get_label(np.array(label.iloc[2]))}, '+method)
+    plt.imshow(pic1.reshape(64, 64).T)
+    image = np.zeros(np.shape(data)[1])
+    for feat in feat_list:
+        image[int(feat)]+=1
+    print(image)
+    plt.imshow(image.reshape(64,64).T, alpha=0.5)
+
+
+def count(feat_list, count_list: np.ndarray, ind: int) -> np.ndarray:
+    for num in feat_list:
+        count_list[ind, num] += 1
+    return count_list
+
+
 def get_rot_data(data):
     num_pics = int(len(data) / 2)
     pics = random.sample(range(0, len(data)), num_pics)
@@ -81,6 +117,68 @@ def get_rot_data(data):
         data.iloc[ind] = np.rot90(np.rot90(pic)).flatten()
     data = pd.DataFrame(data)
     return data, pics
+
+
+def run_1b(data, label):
+
+    np_data = np.array(data)
+    np_labels = np.array(label).flatten()
+
+    num_runs = 100
+    threshold = 0.5
+
+    method = ['Logistic Regression', 'Random Forest', 'Linear svc']
+
+    count_feat = np.zeros([3, np.shape(data)[1]])
+    for i in trange(num_runs):
+        X_boot, y_boot = resample(data, label, n_samples=round(len(data)))
+
+        LogReg = LogisticRegression(C=0.05736152510448681, max_iter=1000)
+        LogReg.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(LogReg, prefit=True)
+        LogReg_features = model.get_support(indices=True)
+        X_LogReg = model.transform(X_boot)
+
+        count_feat = count(feat_list=LogReg_features, count_list=count_feat, ind=0)
+
+        RandForest = RandomForestClassifier()
+        RandForest.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(RandForest, prefit=True)
+        RandForest_features = model.get_support(indices=True)
+        X_RandForest = model.transform(X_boot)
+
+        count_feat = count(feat_list=RandForest_features, count_list=count_feat, ind=1)
+
+        lsvc = SVC(C=9, kernel='linear', max_iter=10000)
+        lsvc.fit(X_boot, y_boot.values.ravel())
+        model = SelectFromModel(lsvc, prefit=True)
+        lsvc_features = model.get_support(indices=True)
+        X_lsvc = model.transform(X_boot)
+
+        count_feat = count(feat_list=lsvc_features, count_list=count_feat, ind=2)
+
+        print(len(LogReg_features), np.shape(X_LogReg))
+        print(len(RandForest_features), np.shape(X_RandForest))
+        print(len(lsvc_features), np.shape(X_lsvc))
+
+    plt.figure()
+    plt.title('Logistic Regression')
+    plt.bar(range(np.shape(data)[1]), count_feat[0, :])
+    plt.figure()
+    plt.title('Random Forest')
+    plt.bar(range(np.shape(data)[1]), count_feat[1, :])
+    plt.figure()
+    plt.title('Linear svc')
+    plt.bar(range(np.shape(data)[1]), count_feat[2, :])
+
+    count_feat[count_feat < num_runs * threshold] = 0
+
+    for i in range(len(count_feat[:, 0])):
+        feat_list = np.nonzero(count_feat[i, :])
+        plot_feat(feat_list[0], method[i])
+
+    plt.show()
+
 
 def main(num_runs):
     try:
@@ -103,11 +201,12 @@ def main(num_runs):
     x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.1, random_state=8)
 
     k = 5
-
+    params_SVC = 9.236708571873866
+    params_LogReg = 0.05736152510448681
     for j in trange(num_runs):
         kf = StratifiedKFold(n_splits=k, shuffle=True)
         prediction = []
-        models = [SVC(), RandomForestClassifier(), LogisticRegression(max_iter=1000, penalty='l2')]
+        models = [SVC(C=params_SVC), RandomForestClassifier(), LogisticRegression(C=params_LogReg, max_iter=1000, penalty='l2')]
         score = np.zeros([len(models), k])
         fold_ind = 0
         for train_index, test_index in kf.split(x_tr, y_tr):
@@ -116,7 +215,7 @@ def main(num_runs):
             for ind, model in enumerate(models):
                 model.fit(X_train, y_train.values.ravel())
                 prediction = model.predict(X_test)
-                score[ind, fold_ind]=(model.score(X_test, y_test))
+                score[ind, fold_ind]=(model.score(x_te, y_te))
                 tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
                 wrong_list.append(check_predictions(prediction, y_test))
                 tpr.append(tp/(tp+fn))
@@ -221,8 +320,16 @@ def main(num_runs):
 
 
 if __name__ == '__main__':
+    try:
+        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
+    except:
+        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 255
+        label = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/Labels.csv")
+    data, pics = get_rot_data(data)
     num_runs = 100
-    main(num_runs)
+    #main(num_runs)
+    run_1b(data, label)
 
 
 
