@@ -20,8 +20,9 @@
 \newpage
 \section{a}
 \subsection{Results}
-During this task noise was added to a random set of pictures 
+During this task noise was added to a random set of pictures and then the accuracy of three different classifiers (SVM 'rbf' kernel, Logistic regression with l2 penalisation and 'lbfgs' solver, Random forest) were measured. The score was calculated in the same way as in 1 a where the classifiers hyper parameters were fitted using cross validation on training set and then the three models were fitted on training data and the score was taken on the test data. No prepossessing was made except for normalisation so that all pixels take values between 0 and 1. Since the method was exactly the same for this exercise as in 1 a we can compare these results in order to see how the noise affects the different classifiers. The noise added had two different levels 100 and 255 were a value of 100 means that every pixel in the noisy picture is modified with a value between 0 and 100/255 see figure \ref{noise pics} for an example, the value which every pixel was modified with was drawn from a uniform distribution. The results from the simulations are shown in tables \ref{SVM table}, \ref{RF table} and \ref{LR table}. Looking at the score for the SVM we can see that the noise has an negative impact on the accuracy of the model were it's affected by both the noise level and the number of noisy pictures. However the performance is still a lot better than 50 \% so the model learns something even when half the pictures are noisy. However the performance of the SVM model is worsened by almost 25 \%. For the Logistic Regression model we can see that the noise doesn't appear to have an big effect on the performance of the model were maximum noise and number of noisy pictures only worsens performance by about 8.6 \%. The Random Forest model seem to be the least affected by lower noise levels, and even an higher score was achieved for low noise than the base case without noise in 1a. However the performance worsened by at most 11 \% which is more than the Logistic Regression for higher noise. As for how many of the miss classified pictures the noisy make up they are only slightly over represented. They could however affect the models even if they are not miss classified in the training since they could lead to the model over fitting on the noise.        
 \subsection{Conclusions}
+We can conclude that the SVM model is most susceptible to noise out of the three classifiers used, this is likely an effect of the low bias kernel used, the noise resistivity of the SVM could be increased by using a higher bias kernel like for example a linear one. Moreover the Logistic Regression and Random Forest classifiers seem to be less affected by noise. The random forest classifier could be good against noise since a noisy picture only affects one decision tree therefore when we add decision trees the tendency for the model to overfit to the noise goes down. 
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c|c}
@@ -33,7 +34,7 @@ During this task noise was added to a random set of pictures
        Std & 0.03& 0.04 & 0.05 & 0.03 & 0.05 & 0.05\\
     \end{tabular}
     \caption{Caption}
-    \label{tab:my_label}
+    \label{SVM table}
 \end{table}
 \begin{table}[H]
 \centering
@@ -46,7 +47,7 @@ During this task noise was added to a random set of pictures
        Std & 0.04& 0.05 & 0.06 & 0.05 & 0.05 & 0.05\\
     \end{tabular}
     \caption{Caption}
-    \label{tab:my_label}
+    \label{LR table}
 \end{table}
 \begin{table}[H]
 \centering
@@ -59,61 +60,102 @@ During this task noise was added to a random set of pictures
        Std & 0.03& 0.03 & 0.04 & 0.06 & 0.04 & 0.05\\
     \end{tabular}
     \caption{Caption}
-    \label{tab:my_label}
+    \label{RF table}
 \end{table}
 \begin{figure}[H]
 \begin{subfigure}{.5\textwidth}
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{2a/pic.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{2a/Noisy pic.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{wrong}
+\label{noise pics}
 \end{figure}
-
+\newpage
 \section{b}
 \subsection{Results}
+For this task the first thing which was made was to split every data point (picture) in to 256 features representing 16x16 picture blocks instead of 4096 features. After this the same three models as in the previous task (a) was ran in the exact same manner as before with the only difference being that instead of noise the data was reduced to the 256 features. Since the original picture is made up of 64x64 pixels we get 16 16x16 boxes see figure \ref{BOXES} which we need to get the accuracy for. For each box the procedure was as previous classification exercises ran 100 times and averaged over, the result for the models and standard deviation can be seen in figure \ref{result 2b}. We can see that box 3 (not for logistic regression) and box 5 yield good accuracy and box 8 very poor performance. What box yields good results should be strongly correlated with important features for the classes since if many important features are located in the box the model should preform well hence we can compare with the results in 1b for Random Forest and the logistic regression (Not SVM different kernel used in 1b!). Doing this we would expect almost all boxes to work well for the logistic regression since it had important features spread over the entire picture and for the Random Forest it should only work well for the box around the forhead area. This is however not what we see which is surprising, what we see is that the models seem to follow eachother roughly in which boxes gives good accuracy. Looking at box 3 top left corner fig \ref{BOXES} and box 5 top right corner \ref{BOXES} the first box makes sense since its around the ear which one can imagine differs a lot between the dogs and cats. Box 5  is surprising however since looking at it with the human eye its difficult to make anything out, one explanation could be that pixels in this area generally differ by a lot between cats and dogs. As for Box 8 which is in bottom left corner in fig \ref{BOXES}, which gives poor accuracy scores this area likely has very little information about weather its a cat or not.     
 \subsection{Conclusion}
-\begin{comment}
+In conclusion one can achieve good accuracy by only looking at a part of the picture it's however not completely straightforward to know which parts yield good results, for example picking an area with important features doesn't seem to be optimal. Furthermore the SVM method once again preformed the best when looking at the optimal Box for this model.
 \begin{figure}[H]
-\begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[scale=0.6]{2b/Result.png}
+    \caption{Caption}
+    \label{result 2b}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{1a/SVM.png}  
-  \caption{Put your sub-caption here}
+  \includegraphics[width=1\linewidth]{2b/Box num 3.png}  
+  
   \label{fig:sub-first}
 \end{subfigure}
-\begin{subfigure}{.33\textwidth}
+\begin{subfigure}{.5\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1a/Logistic regression.png}  
-  \caption{Put your sub-caption here}
+  \includegraphics[width=1\linewidth]{2b/box num 5.png}  
+  
   \label{fig:sub-second}
 \end{subfigure}
-\begin{subfigure}{.33\textwidth}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2b/box num 8.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2b/example pic.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+
+\caption{Put your caption here}
+\label{BOXES}
+\end{figure}
+
+\newpage
+\section{c}
+\subsection{Results}
+\subsection{Conclusion}
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2a/pic.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{1a/Random Forest.png}  
-  \caption{Put your sub-caption here}
+  \includegraphics[width=1\linewidth]{2a/Noisy pic.png}  
+  
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{wrong}
+\label{noise pics}
 \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{1a/Dirty data.png}
-    \caption{Faulty data}
-    \label{faulty data}
-\end{figure}
-\end{comment}
+\section{d}
+\subsection{Results}
+\subsection{Conclusion}
+\section{e}
+\subsection{Results}
+\subsection{Conclusion}
+\section{f}
+\subsection{Results}
+\subsection{Conclusion}
 \end{document}
