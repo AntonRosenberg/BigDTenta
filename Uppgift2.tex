@@ -130,31 +130,142 @@ In conclusion one can achieve good accuracy by only looking at a part of the pic
 \newpage
 \section{c}
 \subsection{Results}
+The same procedure as in 1a and 1b was ran but with half the pictures turned upside down. As for the selected features they are different from 1b for all the models see figure \ref{feet pics} and figure \ref{imp pixels}. There is also a very noticeable effect in performance across all models see table \ref{Rot accuracy} where all the models only preform slightly better than learning nothing at all which would give an score of 0.5. We can also see from the table that the rotated pictures only are slightly over represented in the miss classified pictures which would indicate that the models have an equally hard time classifying upside down images as regular one which is to be expected since half the pictures in the training and test are upside down.    
 \subsection{Conclusion}
+Rotating the pictures impacts performance greatly and affects feature selection for all models. One can see that many of the previously deemed important features now are completely discarded. The reason for the poor performance could be due to the model not being able to learn the differences between the cats and dogs since the data set is too small for it to be able to learn the difference between upside down dogs and cats in relation to as well learning the difference between the non rotated pictures. The upside down pictures seem to be miss leading the models into not looking for all the important features as in 1b plus some extra for classifying upside down images. Rather the models seem to be looking at some mix of the important features for upside down and regular pictures which gives poor performance. This could perhaps be less of a problem with a bigger sample size as previously stated so an suggestion for performance improvement could be to create your own data from the samples you have.  
 \begin{figure}[H]
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{2a/pic.png}  
+  \includegraphics[width=1\linewidth]{2c/Imp feat LR.png}  
   
   \label{fig:sub-first}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{2a/Noisy pic.png}  
+  \includegraphics[width=1\linewidth]{2c/Imp feat RF.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2c/Imp feat SVM.png}  
   
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{noise pics}
+\label{feet pics}
 \end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{1b/Imp_feat LogReg.png}  
+  
+  \label{RandF}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1b/Imp_feat RandForest.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{1b/Imp_feat_svc.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{imp pixels}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2c/Selection LR.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2c/Selection RF.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2c/Selection SVM.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{feet select}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|c|c}
+         & Accuracy & std & Percentage rotated in miss classified  \\
+        SVM & 0.64 & 0.04 & 0.6\\
+        Random Forest & 0.65 & 0.07& 0.45\\
+        Logistic Regression & 0.64 & 0.06 & 0.54
+    \end{tabular}
+    \caption{Caption}
+    \label{Rot accuracy}
+\end{table}
+\newpage
 \section{d}
 \subsection{Results}
+For this task only the SVM classifier was looked due to lengthy simulation times, the SVM was chosen since it had the highest accuracy score on the unmodified data set and was therefore deemed as the best. During theese simulation different amount of pixels were modified by changing them to a random value drawn from a uniform distribution U[0, 256] where 5 different levels of pixels were used see table \ref{pixel accuracy}. The results for the accuracy was averaged over 100 runs for each number of pixels and the feature selection was ran with 100 bootstraps for each pixel number.    
 \subsection{Conclusion}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c|c|c}
+        Number of pixels & 10 &  400  & 1000 & 1500 &2000  \\
+        Accuracy & 0.77 & 0.75 & 0.74 & 0.74 & 0.72\\
+        std & 0.03 & 0.02& 0.02 & 0.02 & 0.02\\
+        
+    \end{tabular}
+    \caption{Caption}
+    \label{pixel accuracy}
+\end{table}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2c/Selection LR.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2c/Selection RF.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2c/Selection SVM.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{feet select}
+\end{figure}
+\newpage
 \section{e}
 \subsection{Results}
 \subsection{Conclusion}
+\newpage
 \section{f}
 \subsection{Results}
 \subsection{Conclusion}
