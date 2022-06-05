@@ -64,13 +64,13 @@ As a conclusion we can say that it's difficult to separate dogs from cats comple
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{1a/Dirty data.png}
-    \caption{Faulty data}
+    \caption{Miss labeled data}
     \label{faulty data}
 \end{figure}
 \newpage
 \section{b}
 \subsection{Result}
-The three different classification methods used for finding the most important features were Logistic regression, Random Forest and SVM with linear kernal. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. We can see that Random forrest clearly looks at the pixels around the forhead, eyes and nose of the cats and dogs \ref{RandF}. We can also see from figure \ref{RandForSel} that the model is not very certain on its feature selections since few of them were selected above 40\% of the time. As for the SVM method it's difficult to see why these pixels are deemed important since they don't cluster around any paricular area of the picture like the around the eyes for example but rather seem to be cluster of pixels around the entire picture. This could be because the linear kernal is poorly suited for this data set this could also be why so few pixels were selected above the threshold of 60\%. The logistic regression also deemed a lot of pixels as important and alot of the features were selected 100\% of the time compared to the Random forest hence logistic regression and SVM seems to be more certain in their feature selection.  The stability of the chosen pixels is improved vastly by bootstrapping and choosing a threshold were only features selected more than the threshold are kept. The threshold was set at 60\% for the pixels shown in \ref{imp pixels}.
+The three different classification methods used for finding the most important features were Logistic regression, Random Forest and SVM with linear kernal. Bootstrapping was used 100 times to see which features were selected with high certainty the results for each method can be seen in figure \ref{imp feat} and figure \ref{imp pixels}. We can see that Random forrest clearly looks at the pixels around the forhead, eyes and nose of the cats and dogs \ref{imp pixels}. We can also see from figure \ref{imp feat} that the model is not very certain on its feature selections since few of them were selected above 80\% of the time. As for the SVM method it has very similar results as the Logistic regression model but with less important features than the logistic regression. The logistic regression also deemed a lot of pixels as important and alot of the features were selected 100\% of the time compared to the Random forest hence logistic regression and SVM seems to be more certain in their feature selection. The stability of the chosen pixels is improved vastly by bootstrapping and choosing a threshold were only features selected more than the threshold are kept. The threshold was set at 60\% for the pixels shown in \ref{imp pixels}.
 \subsection{Conclusions}
 Logistic regression and SVM seems to be the most robust when it comes to certainty in feature selection, they also looks at a lot more features than the Random Forest model. Random forest seems to have trouble deciding which features are deemed important and zero of the features were selected 100\% of the time in the bootstrapping. 
 \begin{figure}[ht]
@@ -78,24 +78,24 @@ Logistic regression and SVM seems to be the most robust when it comes to certain
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1b/Figure_2_bra.png}  
-  \caption{Put your sub-caption here}
+  
   \label{RandForSel}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1b/Figure_3_bra.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1b/Figure_1_bra.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Histograms showing the pixels/features selection count over 100 bootstraps.}
 \label{imp feat}
 \end{figure}
 
@@ -104,24 +104,24 @@ Logistic regression and SVM seems to be the most robust when it comes to certain
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1b/Imp_feat RandForest.png}  
-  \caption{Put your sub-caption here}
+  
   \label{RandF}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1b/Imp_feat_svc.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1b/Imp_feat LogReg.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Features which were selected above 80\% of the time highlighted in an example picture.}
 \label{imp pixels}
 \end{figure}
 \newpage
@@ -151,30 +151,30 @@ The clustering method used was gaussian mixture model and the data was preproces
 \end{comment}
 Gaussian mixture model is a method which generally works quite well since it only assumes that the data can be split into normally distributed sub-classes however we can see that it struggles to produce well separated clusters containing only dogs and cats. This could be due to the fact that the cats and dogs data is not well separated which can be seen by looking at the pair plot of the PCA reduced data see figure \ref{pca}. PCA was choosen since we have a high correlation between many of the pixels (features) since it's a picture of an animal if one pixel has a color (rgb value) the ones next to it will in most cases have a similar value. As to which characteristics of the data the clustering picks up a similar feature selection as in 1b was made for the clusters containing most dogs and the one with most cats, for the dogs it seemed like the area around the right ear was the charactersistic picked up by the cluster whilst for the cats the entire right most side of the picture was the most important. It also seemed to be mostly dark cats in the cat majority cluster containing the cats whilst there were mostly brighter pictures in the dog majority cluster.
 \subsection{Conclusion}
-The clusters don't seem to agree to well with the class labels since no number of clusters produces purely clusters containing only dogs or cats as seen in the example for 2, 3 and 8 clusters in \ref{LabelOverlap}. Furthermore the clusters don't seem to be well spread since the low Silhuette scores seen in \ref{sill} suggests that members in clusters fit well in neighbouring clusters as well. 
+The clusters don't seem to agree to well with the class labels since no number of clusters produces purely clusters containing only dogs or cats as seen in the example for 2, 3 and 8 clusters in \ref{LabelOverlap}. Furthermore the clusters don't seem to be well spread since the low Silhouette scores seen in \ref{sill} suggests that members in clusters fit well in neighbouring clusters as well. 
 \begin{figure}[ht]
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1c/label overlapp 2 clusters.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1c/label overlapp 3 clusters.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1c/label overlapp 8 clusters.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Bar plots showing percentage of dogs in each cluster in order to show how well the labels get separated.}
 \label{LabelOverlap}
 \end{figure}
 \begin{table}[H]
@@ -184,21 +184,21 @@ The clusters don't seem to agree to well with the class labels since no number o
        Silhouette score  & 0.111 & 0.133 & 0.115 & 0.119 &  0.125 &  0.115 &  0.112 \\
        std & 0.026 &  0.027 &  0.027 &  0.026 &  0.021 &  0.027 &  0.025 
     \end{tabular}
-    \caption{Caption}
+    \caption{Silhouette score for each number of clusters.}
     \label{sill}
 \end{table}
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{1c/Scree plot.png}
-    \caption{Caption}
+    \caption{Scree plot showing the importance of each PCA components. (Red line highlights cutoff)}
     \label{scree}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale = 0.3]{1c/True labels sns.png}
-    \caption{Caption}
+    \caption{Pair plot showing the true labels}
     \label{pca}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,24 +213,24 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1d/Cats/siluette cats.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Cats/davies cats.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Cats/Calinski cats.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{The Siluette, Davies-Bouldin and Callinski-Harabasz scores as function of cluster number for the cats.}
 \label{Int indiciees}
 \end{figure}
 \begin{figure}[ht]
@@ -238,24 +238,24 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1d/Dogs/siluette dog.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Dogs/Davies_dog.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Dogs/Calinski dog.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{The Siluette, Davies-Bouldin and Callinski-Harabasz scores as function of cluster number for the dogs.}
 \label{Int indiciees dog}
 \end{figure}
 \begin{figure}[ht]
@@ -263,24 +263,24 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1d/Cats/example clust 2.png}  
-  \caption{Put your sub-caption here}
+
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Cats/example clust 1.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Cats/Example clust 0.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Example of cats in each of the three clusters for the cats.}
 \label{example cat}
 \end{figure}
 
@@ -289,17 +289,17 @@ In conclusion the internal indicies suggest that the cats have 3 clusters whilst
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1d/Dogs/Example dog clust 1.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1d/Dogs/Example dog clust 0.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Example of cats in each of the two clusters for the dogs.}
 \label{example dog}
 \end{figure}
 \newpage
@@ -313,24 +313,24 @@ In conclusion it's clear that the logistic regression looks at many parts of the
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp feat RandomForest pic.png}  
-  \caption{Put your sub-caption here}
+  
   \label{rndf selection}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp_feat Linear svc.png}  
-  \caption{Put your sub-caption here}
+  
   \label{}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/imp feat LogisticRegression.png}  
-  \caption{Put your sub-caption here}
+  
   \label{LogReg dog}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Features/pixels selected more than 80\% of the time highlighted for the dogs.}
 \label{example dog}
 \end{figure}
 \begin{figure}[H]
@@ -338,24 +338,24 @@ In conclusion it's clear that the logistic regression looks at many parts of the
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection Random Forest.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection linear svc.png}  
-  \caption{Put your sub-caption here}
+  
   \label{svc selection}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Dogs 2 clusters/selection Logistic.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Histograms showing the pixels/features selection count over 100 bootstraps.}
 \label{example dog}
 \end{figure}
 
@@ -364,24 +364,24 @@ In conclusion it's clear that the logistic regression looks at many parts of the
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat RandomForest.png}  
-  \caption{Put your sub-caption here}
+  
   \label{}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat linear svc bra.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/impfeat LogReg.png}  
-  \caption{Put your sub-caption here}
+  
   \label{LogReg cat}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Features/pixels selected more than 80\% of the time highlighted for the cats.}
 \label{example dog}
 \end{figure}
 \begin{figure}[H]
@@ -389,33 +389,33 @@ In conclusion it's clear that the logistic regression looks at many parts of the
   \centering
   % include first image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected RandomForest.png}  
-  \caption{Put your sub-caption here}
+  
   \label{rndf selection cat}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected LinearSvc.png}  
-  \caption{Put your sub-caption here}
+  
   \label{linear svc selection cat}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
   \includegraphics[width=1\linewidth]{1e/Cats 5 clusters/selected LogReg.png}  
-  \caption{Put your sub-caption here}
+  
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Histograms showing the pixels/features selection count over 100 bootstraps.}
 \label{example dog}
 \end{figure}
 
 \newpage
 \section{f}
 \subsection{Results}
-The data was firstly split into a subset of cats and the rest as test data the same procedures as in c with PCA was then made see figure \ref{scree 1f}. A logistic regression model was then fitted to the data set, it was difficult to tune the hyper parameter this time around since the data set to cross validate contained so few data points which could effect  the performance of the classifier. The classifier was then ran on the test data set and classified all data points to the cluster labels. In order to see weather it could separate the dogs from the cats the precentage of dogs in each cluster was recored see figure \ref{1f}. When the result was averaged over 100 runs as seen in the left most graph the classifier could not separate the dogs from cats. However during some single runs there would be clusters of data containing mostly dogs and the rest none as seen in the right most picture in figure \ref{1f}. 
+The data was firstly split into a subset of cats and the rest as test data the same procedures as in c with PCA was then made see figure \ref{scree 1f}. A logistic regression model was then fitted to the data set, it was difficult to tune the hyper parameter this time around since the data set to cross validate contained so few data points which could effect  the performance of the classifier. The classifier was then ran on the test data set and classified all data points to the cluster labels. In order to see weather it could separate the dogs from the cats the percentage of dogs in each cluster was recorded see figure \ref{1f}. When the result was averaged over 100 runs as seen in the left most graph the classifier could not separate the dogs from cats. However during some single runs there would be clusters of data containing mostly dogs and the rest none as seen in the right most picture in figure \ref{1f}. 
 \subsection{Conclusions}
-It doesn't seem like the classification method can separate dogs from cats by looking at the clustered subset of cats. However during some runs it would separate cats from dogs very well this could be an effect of which data was chosen in the subset of cats where if images of cats with doglike features were in the clustered data set perhaps the classifier could learn to separate the dogs from cats. It could also be an effect of the miss labeled data being selected in the cat subset since if enough of them were selected one cluster could have an majority of dogs which were labeled as cats.  
+It doesn't seem like the classification method can separate dogs from cats by looking at the clustered subset of cats. This is not surprising and the result shown in the left graph in figure \ref{1f} is to be expected since no dogs were in the data set which trained the model so the dogs should on average be evenly distributed between the three clusters. However during some runs it would separate cats from dogs very well this could be an effect of which data was chosen in the subset of cats where if images of cats with doglike features were in the clustered data set perhaps the classifier could learn to separate the dogs from cats. It could also be an effect of the miss labeled data being selected in the cat subset since if enough of them were selected one cluster could have an majority of dogs which were labeled as cats.  
 \begin{figure}[H]
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -429,13 +429,13 @@ It doesn't seem like the classification method can separate dogs from cats by lo
   \includegraphics[width=1\linewidth]{1f/clustering.png}  
   \label{1f b}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Bar plots showing percentage of dogs in each cluster in order to show how well the labels get separated.}
 \label{1f}
 \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{1f/Scree.png}
-    \caption{Caption}
+    \caption{Scree plot showing the importance of each PCA components. (Red line highlights cutoff)}
     \label{scree 1f}
 \end{figure}
 \end{document}
