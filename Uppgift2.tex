@@ -20,7 +20,7 @@
 \newpage
 \section{a}
 \subsection{Results}
-During this task noise was added to a random set of pictures and then the accuracy of three different classifiers (SVM 'rbf' kernel, Logistic regression with l2 penalisation and 'lbfgs' solver, Random forest) were measured. The score was calculated in the same way as in 1 a where the classifiers hyper parameters were fitted using cross validation on training set and then the three models were fitted on training data and the score was taken on the test data. No prepossessing was made except for normalisation so that all pixels take values between 0 and 1. Since the method was exactly the same for this exercise as in 1 a we can compare these results in order to see how the noise affects the different classifiers. The noise added had two different levels 100 and 255 were a value of 100 means that every pixel in the noisy picture is modified with a value between 0 and 100/255 see figure \ref{noise pics} for an example, the value which every pixel was modified with was drawn from a uniform distribution. The results from the simulations are shown in tables \ref{SVM table}, \ref{RF table} and \ref{LR table}. Looking at the score for the SVM we can see that the noise has an negative impact on the accuracy of the model were it's affected by both the noise level and the number of noisy pictures. However the performance is still a lot better than 50 \% so the model learns something even when half the pictures are noisy. However the performance of the SVM model is worsened by almost 25 \%. For the Logistic Regression model we can see that the noise doesn't appear to have an big effect on the performance of the model were maximum noise and number of noisy pictures only worsens performance by about 8.6 \%. The Random Forest model seem to be the least affected by lower noise levels, and even an higher score was achieved for low noise than the base case without noise in 1a. However the performance worsened by at most 11 \% which is more than the Logistic Regression for higher noise. As for how many of the miss classified pictures the noisy make up they are only slightly over represented. They could however affect the models even if they are not miss classified in the training since they could lead to the model over fitting on the noise.        
+During this task noise was added to a random set of pictures and then the accuracy of three different classifiers (SVM 'rbf' kernel, Logistic regression with l2 penalisation and 'lbfgs' solver, Random forest) were measured. The score was calculated in the same way as in 1 a where the classifiers hyper parameters were fitted using cross validation on training set and then the three models were fitted on training data and the score was taken on the test data. No prepossessing was made except for normalisation so that all pixels take values between 0 and 1. Since the method was exactly the same for this exercise as in 1 a we can compare these results in order to see how the noise affects the different classifiers. The noise added had two different levels 100 and 255 were a value of 100 means that every pixel in the noisy picture is modified with a value between 0 and 100/256 see figure \ref{noise pics} for an example, the value which every pixel was modified with was drawn from a uniform distribution. The results from the simulations are shown in tables \ref{SVM table}, \ref{RF table} and \ref{LR table}. Looking at the score for the SVM we can see that the noise has an negative impact on the accuracy of the model were it's affected by both the noise level and the number of noisy pictures. However the performance is still a lot better than 50 \% so the model learns something even when half the pictures are noisy. However the performance of the SVM model is worsened by almost 25 \%. For the Logistic Regression model we can see that the noise doesn't appear to have an big effect on the performance of the model were maximum noise and number of noisy pictures only worsens performance by about 8.6 \%. The Random Forest model seem to be the least affected by lower noise levels, and even an higher score was achieved for low noise than the base case without noise in 1a. However the performance worsened by at most 11 \% which is more than the Logistic Regression for higher noise. As for how many of the miss classified pictures the noisy make up they are only slightly over represented. They could however affect the models even if they are not miss classified in the training since they could lead to the model over fitting on the noise.        
 \subsection{Conclusions}
 We can conclude that the SVM model is most susceptible to noise out of the three classifiers used, this is likely an effect of the low bias kernel used, the noise resistivity of the SVM could be increased by using a higher bias kernel like for example a linear one. Moreover the Logistic Regression and Random Forest classifiers seem to be less affected by noise. The random forest classifier could be good against noise since a noisy picture only affects one decision tree therefore when we add decision trees the tendency for the model to overfit to the noise goes down. 
 \begin{table}[H]
@@ -223,8 +223,9 @@ Rotating the pictures impacts performance greatly and affects feature selection 
 \newpage
 \section{d}
 \subsection{Results}
-For this task only the SVM classifier was looked due to lengthy simulation times, the SVM was chosen since it had the highest accuracy score on the unmodified data set and was therefore deemed as the best. During theese simulation different amount of pixels were modified by changing them to a random value drawn from a uniform distribution U[0, 256] where 5 different levels of pixels were used see table \ref{pixel accuracy}. The results for the accuracy was averaged over 100 runs for each number of pixels and the feature selection was ran with 100 bootstraps for each pixel number.    
+For this task only the Logistic regression classifier was looked due to lengthy simulation times. During these simulation different amount of pixels were modified by changing them to a random value drawn from a uniform distribution U[0, 256] where 5 different levels of pixels were used see table \ref{pixel accuracy} for accuracy results. The results for the accuracy was averaged over 100 runs for each number of pixels and the feature selection was ran with 100 bootstraps for each pixel number see figures \ref{feet select 2d} and \ref{feet histo 2d}. We can see that the noise affects the feature selection for the model where more noise makes the model select what appears to be random pixels as important. It also has an negative effect on the accuracy, the models performance surprisingly doesn't drop that much however even when modifying almost half of the pictures it still has the ability to learn the difference between dogs and cats good enough to achieve above 70\% accuracy.
 \subsection{Conclusion}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
@@ -240,26 +241,51 @@ For this task only the SVM classifier was looked due to lengthy simulation times
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{2c/Selection LR.png}  
+  \includegraphics[width=1\linewidth]{2d/,10, Log reg.png}  
+  \caption{10 pixels}
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2d/,1000, Log reg.png}  
+  \caption{1000 pixels}
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2d/,2000, Log reg.png}  
+  \caption{2000 pixels}
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{feet select 2d}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2d/Logistic Regression, 10.png}  
   
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{2c/Selection RF.png}  
+  \includegraphics[width=1\linewidth]{2d/Logistic Regression, 1000.png}  
   
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{2c/Selection SVM.png}  
+  \includegraphics[width=1\linewidth]{2d/Logistic Regression, 2000.png}  
   
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{feet select}
+\label{feet histo 2d}
 \end{figure}
 \newpage
 \section{e}
