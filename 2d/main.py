@@ -96,15 +96,8 @@ def add_noise(data, noise_level, pixels, num_pics):
     for ind in pics:
         for i in indexes:
             noise = np.random.randint(noise_level) / 256
+            data.iloc[ind][i] = noise
 
-            if np.random.rand() < 0.5:
-                data.iloc[ind][i] -= noise
-                if data.iloc[ind][i] < 0:
-                    data.iloc[ind][i] = 0
-            else:
-                data.iloc[ind][i] += noise
-                if data.iloc[ind][i] > 1:
-                    data.iloc[ind][i] = 1
     return data, pics
 
 def get_noisy_errors(pics, err_pics):
@@ -189,10 +182,10 @@ def run_1b(noise_level, pixels, num_pics, num_runs = 100):
 
 def main(num_pics, noise_level, num_runs, pixels):
     try:
-        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 255
+        data = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/CATSnDOGS.csv") / 256
         label = pd.read_csv("/Users/antonrosenberg/Documents/GitHub/BigDTenta/Labels.csv")
     except:
-        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 255
+        data = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/CATSnDOGS.csv") / 256
         label = pd.read_csv("C:/Users/anton\OneDrive\Dokument\GitHub\BigDTenta/Labels.csv")
 
     data, pics = add_noise(data, noise_level, pixels, num_pics)
@@ -329,10 +322,9 @@ if __name__ == '__main__':
     noise_level_list = [255]
     num_runs = 100
     num_pixels = [10, 400, 1000, 1500, 2000]
-    num_pixels=[4096]
 
     for pixels in num_pixels:
-        main(198, 255, num_runs, pixels)
-        run_1b(255, pixels, 198)
+        main(198, 256, num_runs, pixels)
+        run_1b(256, pixels, 198)
 
 

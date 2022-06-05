@@ -93,13 +93,12 @@ def add_noise(data, noise_level, pixels, num_pics):
     print(len(data.iloc[0]))
     print(pixels)
     #indexes = random.sample(range(0, len(data.iloc[0])), pixels)
-    indexes = []
-    indexes+=list(range(200, round(pixels/2)))
-    indexes+=list(range(4096-200-round(pixels/2), 4096))
+    indexes=range(0, pixels)
     for ind in pics:
         for i in indexes:
             noise = np.random.randint(noise_level) / 256
-
+            data.iloc[ind][i] = noise
+            '''
             if np.random.rand() < 0.5:
                 data.iloc[ind][i] -= noise
                 if data.iloc[ind][i] < 0:
@@ -108,6 +107,7 @@ def add_noise(data, noise_level, pixels, num_pics):
                 data.iloc[ind][i] += noise
                 if data.iloc[ind][i] > 1:
                     data.iloc[ind][i] = 1
+            '''
     return data, pics
 
 def get_noisy_errors(pics, err_pics):
