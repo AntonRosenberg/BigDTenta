@@ -31,6 +31,7 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.feature_selection import SelectFromModel
 import random
+import itertools
 
 
 def histogram(wrong_list):
@@ -92,23 +93,72 @@ def add_noise(data, noise_level, pixels, num_pics):
     pics = random.sample(range(0, len(data)), num_pics)
     print(len(data.iloc[0]))
     print(pixels)
-    #indexes = random.sample(range(0, len(data.iloc[0])), pixels)
-    indexes=range(0, pixels)
-    for ind in pics:
-        for i in indexes:
-            noise = np.random.randint(noise_level) / 256
-            data.iloc[ind][i] = noise
-            '''
-            if np.random.rand() < 0.5:
-                data.iloc[ind][i] -= noise
-                if data.iloc[ind][i] < 0:
-                    data.iloc[ind][i] = 0
-            else:
-                data.iloc[ind][i] += noise
-                if data.iloc[ind][i] > 1:
-                    data.iloc[ind][i] = 1
-            '''
-    return data, pics
+    '''
+    indexes=[]
+    
+    indexes.append(list(random.sample(range(300, round(pixels/3)+301), round(pixels/3))))
+    indexes.append(list(random.sample(range(1300, round(pixels/3)+1301), round(pixels/3))))
+    indexes.append(list(random.sample(range(3200, round(pixels / 3) + 3201), round(pixels / 3))))
+    indexes = list(itertools.chain.from_iterable(indexes))
+    print(indexes)
+    '''
+    number=round(pixels / 256)
+    boxes = [5, 9, 3, 6, 1, 10, 1, 11]
+    boxes = [boxes[i] for i in range(number)]
+    for box_num in boxes:
+        index_row, index_column = get_16X16(data, box_num)
+        for ind in pics:
+                pic=np.array(data.iloc[ind]).reshape(64,64)
+
+                for j, row in enumerate(index_row):
+                        for k, col in enumerate(index_column):
+                            noise = np.random.randint(noise_level) / 256
+                            pic[row][col] = noise
+
+                data.iloc[ind]= pic.flatten()
+                '''
+                if np.random.rand() < 0.5:
+                    data.iloc[ind][i] -= noise
+                    if data.iloc[ind][i] < 0:
+                        data.iloc[ind][i] = 0
+                else:
+                    data.iloc[ind][i] += noise
+                    if data.iloc[ind][i] > 1:
+                        data.iloc[ind][i] = 1
+                '''
+    return pd.DataFrame(data), pics
+
+def get_16X16(data, box_num):
+    data=np.array(data)
+    box_ind = np.linspace(box_num*255, 255*(box_num+1), 256)
+    box_ind = [int(val) for val in box_ind]
+    boxes = [np.zeros(256) for _ in range(len(data))]
+
+    indexes = range(box_num*256, 256*(box_num+1), 16)
+    indexes_boxes = range(0, 256, 16)
+
+
+    if box_num<4:
+        index_row = range(box_num * 16, 16 * (1 + box_num))
+        index_column = range(0, 16)
+    elif box_num<8:
+        index_row = range((box_num-4) * 16, 16 * (1 + (box_num-4)))
+        index_column = range(16, 32)
+    elif box_num<12:
+        index_row = range((box_num-8) * 16, 16 * (1 + (box_num-8)))
+        index_column = range(32, 48)
+    else:
+        index_row = range((box_num-12) * 16, 16 * (1 + (box_num-12)))
+        index_column = range(48, 64)
+    ind_add = 49
+
+    for i, pic in enumerate(data):
+        pic= pic.reshape(64,64)
+        for j, row in enumerate(index_row):
+            for k, col in enumerate(index_column):
+                boxes[i][k+16*j] = pic[row][col]
+
+    return index_row, index_column
 
 def get_noisy_errors(pics, err_pics):
     noisy_errors = []
