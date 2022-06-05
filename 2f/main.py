@@ -114,7 +114,7 @@ def get_rot_data(data):
     pics = random.sample(range(0, len(data)), len(data))
     for ind in pics:
         pic = np.array(data.iloc[ind]).reshape(64, 64)
-        data.iloc[ind] = np.rot90(np.rot90(pic)).flatten()
+        data.iloc[ind] = np.rot90(pic).flatten()
     data = pd.DataFrame(data)
     return data, pics
 
