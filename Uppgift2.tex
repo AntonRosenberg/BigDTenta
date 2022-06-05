@@ -33,7 +33,7 @@ We can conclude that the SVM model is most susceptible to noise out of the three
        Accuracy & 0.76 & 0.74 & 0.66 & 0.67 & 0.68 & 0.65 \\
        Std & 0.03& 0.04 & 0.05 & 0.03 & 0.05 & 0.05\\
     \end{tabular}
-    \caption{Caption}
+    \caption{Accuracy score for different noise levels and number of noisy pictures}
     \label{SVM table}
 \end{table}
 \begin{table}[H]
@@ -46,7 +46,7 @@ We can conclude that the SVM model is most susceptible to noise out of the three
        Accuracy & 0.75 & 0.77 & 0.74 & 0.76 & 0.73 & 0.7 \\
        Std & 0.04& 0.05 & 0.06 & 0.05 & 0.05 & 0.05\\
     \end{tabular}
-    \caption{Caption}
+    \caption{Accuracy score for different noise levels and number of noisy pictures}
     \label{LR table}
 \end{table}
 \begin{table}[H]
@@ -59,7 +59,7 @@ We can conclude that the SVM model is most susceptible to noise out of the three
        Accuracy & 0.79 & 0.8 & 0.77 & 0.77 & 0.74 & 0.7 \\
        Std & 0.03& 0.03 & 0.04 & 0.06 & 0.04 & 0.05\\
     \end{tabular}
-    \caption{Caption}
+    \caption{Accuracy score for different noise levels and number of noisy pictures}
     \label{RF table}
 \end{table}
 \begin{figure}[H]
@@ -77,7 +77,7 @@ We can conclude that the SVM model is most susceptible to noise out of the three
   
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Example of picture before and after added noise, noise level was set to 100}
 \label{noise pics}
 \end{figure}
 \newpage
@@ -89,7 +89,7 @@ In conclusion one can achieve good accuracy by only looking at a part of the pic
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{2b/Result.png}
-    \caption{Caption}
+    \caption{Accuracy for the different classification methods as a function of box number.}
     \label{result 2b}
 \end{figure}
 \begin{figure}[H]
@@ -123,7 +123,7 @@ In conclusion one can achieve good accuracy by only looking at a part of the pic
   \label{fig:sub-first}
 \end{subfigure}
 
-\caption{Put your caption here}
+\caption{Example showing box 3 top left, 5 top right and 8 bottom left as well as the original picture.}
 \label{BOXES}
 \end{figure}
 
@@ -155,7 +155,7 @@ Rotating the pictures impacts performance greatly and affects feature selection 
   
   \label{fig:sub-second}
 \end{subfigure}
-\caption{Put your caption here}
+\caption{Highlights features selected more than  }
 \label{feet pics}
 \end{figure}
 \begin{figure}[H]
@@ -357,31 +357,113 @@ By targeting selected features the models performance can be brought down more t
 \newpage
 \section{f}
 \subsection{Results}
-
+For this setup a similar process as in 1d was ran. First the entire data set was used but with each pixel as a sample with 198 features this data was clustered and three internal indices were averaged for over one hundred runs. This was done for multiple number of clusters and the result can be seen in \ref{int f}. The scores suggest that 10 clusters is the optimal amount for the the entire data set. Moreover to see what the clustering represents the predicted cluster labels for each pixel was used as the value for that pixel in a picture the result of this for the entire data set can be seen in the left most image in figure \ref{reps}. The same was then done for data containing only cats where the results can be seen in \ref{int f cats}, this suggests that 2 clusters is optimal for the cat data and visualising what these clusters represent we get the middle image in \ref{reps}. Finally the same procedure was done for the dogs data set and we now got 9 clusters as the optimum see figure \ref{int f dogs}. The visualisation of this clustering can be seen in the right most image in figure \ref{reps}.  
 \subsection{Conclusion}
+Looking at the visualisation of the clustering we can see that the clusters make up a picture of a cat on top of a dog for the entire data set and a cat and dog for the cat and dog data set respectively. The clustering seems to pickup how a generic cat and dog looks. One can see more features of the cat such as eyes by using more clusters than what the internal indices suggest to be the optimum see figure \ref{reps 2}. The reason for there being different number of clusters in the cat and dog data set could be due to the fact that the dogs have more generic features which are picked up by the clustering than the dogs.   
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
   \centering
   % include first image
-  \includegraphics[width=1\linewidth]{2e/Logistic Regression, 10.png}  
+  \includegraphics[width=1\linewidth]{2f/Calinski.png}  
   
   \label{fig:sub-first}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{2e/Logistic Regression, 1000.png}  
+  \includegraphics[width=1\linewidth]{2f/Davies.png}  
   
   \label{fig:sub-second}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   % include second image
-  \includegraphics[width=1\linewidth]{2f/Logistic Regression, 2000.png}  
+  \includegraphics[width=1\linewidth]{2f/Siluette.png}  
   
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{feet histo 2e}
+\label{int f}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2f/Cats/Calinski.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Cats/Davies.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Cats/Siluette.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{int f cats}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2f/Dogs/Calinski.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Dogs/Davies.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Dogs/Sillhouete.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{int f dogs}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2f/Data represent.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Cats/Data represent cats.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Dogs/Dogs represent.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{reps}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.4]{2f/Cats/Data represent cats 2.png}
+    \caption{Caption}
+    \label{reps 2}
 \end{figure}
 \end{document}
