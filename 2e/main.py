@@ -92,7 +92,10 @@ def add_noise(data, noise_level, pixels, num_pics):
     pics = random.sample(range(0, len(data)), num_pics)
     print(len(data.iloc[0]))
     print(pixels)
-    indexes = random.sample(range(0, len(data.iloc[0])), pixels)
+    #indexes = random.sample(range(0, len(data.iloc[0])), pixels)
+    indexes = []
+    indexes+=list(range(200, round(pixels/2)))
+    indexes+=list(range(4096-200-round(pixels/2), 4096))
     for ind in pics:
         for i in indexes:
             noise = np.random.randint(noise_level) / 256
@@ -205,7 +208,7 @@ def main(num_pics, noise_level, num_runs, pixels):
     std = []
     tpr = []
     tnr = []
-    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.3, random_state=7)
+    x_tr, x_te, y_tr, y_te = train_test_split(data, label, test_size=0.3, random_state=8)
 
     k = 5
     params_SVC = 9.236708571873866
@@ -329,7 +332,6 @@ if __name__ == '__main__':
     noise_level_list = [255]
     num_runs = 100
     num_pixels = [10, 400, 1000, 1500, 2000]
-    num_pixels=[4096]
 
     for pixels in num_pixels:
         main(198, 255, num_runs, pixels)
