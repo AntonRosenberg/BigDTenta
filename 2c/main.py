@@ -125,7 +125,7 @@ def run_1b(data, label):
     np_labels = np.array(label).flatten()
 
     num_runs = 100
-    threshold = 0.5
+    threshold = 0.8
 
     method = ['Logistic Regression', 'Random Forest', 'Linear svc']
 

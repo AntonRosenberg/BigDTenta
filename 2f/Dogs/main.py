@@ -147,7 +147,7 @@ def main(data):
     y_pred = kmeans.predict(data)
     '''
     num_runs = 1
-    num_cluster_list = range(2, 10)
+    num_cluster_list = range(15, 16)
     silhouette = np.zeros([num_runs, len(num_cluster_list)])
     calinski = np.zeros([num_runs, len(num_cluster_list)])
     davies = np.zeros([num_runs, len(num_cluster_list)])
@@ -173,6 +173,7 @@ def main(data):
             plot_list = np.zeros(4096)
             for index in indexes:
                 plot_list[index]=y_pred[index]
+            plt.figure()
             plt.imshow(plot_list.reshape(64,64).T)
             #plot_pic(pics[index_min], i=index_min)
             plt.show()
@@ -276,4 +277,4 @@ if __name__ == '__main__':
     np_labels = np.array(label).flatten()
 
     dogs, label_dogs, cats, label_cats = separate_data(data, label)
-    main(cats)
+    main(dogs)
