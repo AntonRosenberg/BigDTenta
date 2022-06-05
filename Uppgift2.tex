@@ -290,19 +290,19 @@ The logistic regression model seems to be quite unaffected by changing a small a
 \newpage
 \section{e}
 \subsection{Results}
-By adapting the noise from d such that the pixels selected are in the 16x16 boxes from b which gave best results instead of at random a worse accuracy is achieved. This is likely due to the important features being targeted by the change in pixels which makes it difficult for the model to separate the two classes. Once the important features are noisy the model likely overfits to the noise and struggles to learn from the data set.  
+By adapting the noise from d such that the pixels selected are in the 16x16 boxes from b which gave best results instead of at random a worse accuracy is achieved see table. This is likely due to the important features being targeted by the change in pixels see figure \ref{feet select 2e} which makes it difficult for the model to separate the two classes. Once the important features are noisy the model likely overfits to the noise and struggles to learn from the data set. In order to achieve the worst classifictation a possibility would be to take all the most important features in order of their coefficent value from the Logistic regression function and add noise to these features.  
 \subsection{Conclusion}
 By targeting selected features the models performance can be brought down more than with random pixels being the subject of alteration.
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c|c|c|c}
         Number of pixels & 10 &  400  & 1000 & 1500 &2000  \\
-        Accuracy & 0.77 & 0.75 & 0.74 & 0.74 & 0.72\\
-        std & 0.03 & 0.02& 0.02 & 0.02 & 0.02\\
+        Accuracy & 0.78 & 0.77 & 0.74 & 0.70 & 0.66\\
+        std & 0.03 & 0.02& 0.04 & 0.03 & 0.04\\
         
     \end{tabular}
     \caption{Caption}
-    \label{pixel accuracy}
+    \label{pixel accuracy 2e}
 \end{table}
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
@@ -327,7 +327,7 @@ By targeting selected features the models performance can be brought down more t
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{feet select 2d}
+\label{feet select 2e}
 \end{figure}
 \begin{figure}[H]
 \begin{subfigure}{.33\textwidth}
@@ -352,10 +352,36 @@ By targeting selected features the models performance can be brought down more t
   \label{fig:sub-second}
 \end{subfigure}
 \caption{Put your caption here}
-\label{feet histo 2d}
+\label{feet histo 2e}
 \end{figure}
 \newpage
 \section{f}
 \subsection{Results}
+
 \subsection{Conclusion}
+\begin{figure}[H]
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include first image
+  \includegraphics[width=1\linewidth]{2e/Logistic Regression, 10.png}  
+  
+  \label{fig:sub-first}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2e/Logistic Regression, 1000.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  % include second image
+  \includegraphics[width=1\linewidth]{2f/Logistic Regression, 2000.png}  
+  
+  \label{fig:sub-second}
+\end{subfigure}
+\caption{Put your caption here}
+\label{feet histo 2e}
+\end{figure}
 \end{document}
